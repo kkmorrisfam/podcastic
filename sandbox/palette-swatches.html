@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Podcast Player – Styleguide</title>
+  <style>
+    body {
+      margin: 0; padding: 2rem; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: #0b1222; color: #e6edf6;
+    }
+    h1 { font-size: 2rem; margin-bottom: 1rem; }
+    p { color: #9fb0c7; }
+
+    nav {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 0.75rem 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+    }
+
+    a { color: #38BDF8; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    @media (max-width: 900px){ .row { grid-template-columns: 1fr; } }
+
+    .section {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px; padding: 1.25rem;
+      margin-top: 2rem;
+    }
+
+    .section h2 { margin: 0 0 1rem; font-size: 1.25rem; letter-spacing: 0.2px; }
+
+    .grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;
+    }
+
+    .swatch {
+      border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .color {
+      height: 112px; display: flex; align-items: end; justify-content: end; padding: 8px;
+      background: #000; color: #fff;
+    }
+
+    .label { display: flex; flex-direction: column; font-size: 12px; gap: 2px; backdrop-filter: blur(6px);
+      background: rgba(0,0,0,0.22); padding: 4px 8px; border-radius: 8px; }
+
+    .meta { padding: 10px 12px; background: rgba(255,255,255,0.02); border-top: 1px solid rgba(255,255,255,0.06); }
+    .meta .name { font-weight: 600; }
+    .meta .use { color: #9fb0c7; font-size: 12px; margin-top: 2px; }
+
+    .legend { display: inline-grid; grid-template-columns: auto auto; gap: 0.25rem 1rem; font-size: 13px; margin-top: 0.5rem; color: #b8c6d9; }
+    .pill { display:inline-flex; align-items:center; gap:6px; padding:4px 10px; border-radius:20px; font-size:12px; border:1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); }
+
+    .tokens { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem; }
+    .token-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 1rem;
+    }
+    .token-card h3 { margin: 0 0 0.5rem; font-size: 1rem; color: #38BDF8; }
+    .token-card p { font-size: 0.9rem; color: #b8c6d9; margin: 0.25rem 0; }
+
+    .demo-area {
+      display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: 1rem;
+    }
+    .btn {
+      border: none; border-radius: 8px; padding: 0.6rem 1.2rem; font-weight: 600; cursor: pointer;
+      font-size: 0.95rem; transition: background 0.3s ease, transform 0.2s ease;
+    }
+    .btn:hover { transform: scale(1.05); }
+    .btn-accent { background: #FB7185; color: #fff; }
+    .btn-accent:hover { background: #f86b7f; }
+    .btn-highlight { background: #38BDF8; color: #0b1222; }
+    .btn-highlight:hover { background: #2fa8de; }
+    .btn-outline { background: transparent; color: #38BDF8; border: 2px solid #38BDF8; }
+    .btn-outline:hover { background: rgba(56,189,248,0.1); }
+
+    .demo-card {
+      background: #1E293B; border-radius: 12px; padding: 1rem; width: 260px; color: #F8FAFC;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      transition: transform 0.3s ease;
+    }
+    .demo-card:hover { transform: translateY(-4px); box-shadow: 0 8px 16px rgba(0,0,0,0.25); }
+
+    .demo-card h4 { margin-top: 0; color: #38BDF8; }
+    .demo-card p { font-size: 0.9rem; color: #c9d3e2; }
+
+    .typography-sample h1, .typography-sample h2, .typography-sample h3, .typography-sample p {
+      margin: 0.25rem 0;
+    }
+    .typography-sample { margin-top: 1rem; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/">🏠 Home</a> ·
+    <a href="/styleguide">🎨 Styleguide</a> ·
+    <a href="/about">ℹ️ About</a>
+  </nav>
+
+  <header>
+    <h1>Podcast Player – Styleguide</h1>
+    <p>This page documents the color palettes and design tokens for both light and dark modes in the Midnight Coral theme.</p>
+  </header>
+
+  <div class="row">
+    <section class="section">
+      <h2>🌞 Light Palette</h2>
+      <div class="legend">
+        <span class="pill">Primary Text: <code>#111827</code></span>
+        <span class="pill">Secondary Text: <code>#4B5563</code></span>
+      </div>
+      <div class="grid" id="light-grid"></div>
+    </section>
+
+    <section class="section">
+      <h2>🌙 Dark Palette</h2>
+      <div class="legend">
+        <span class="pill">Primary Text: <code>#F8FAFC</code></span>
+        <span class="pill">Secondary Text: <code>#94A3B8</code></span>
+      </div>
+      <div class="grid" id="dark-grid"></div>
+    </section>
+  </div>
+
+  <section class="section">
+    <h2>🔤 Typography Tokens</h2>
+    <div class="tokens">
+      <div class="token-card">
+        <h3>Font Family</h3>
+        <p><strong>Primary:</strong> Inter, system-ui, sans-serif</p>
+        <p><strong>Headings:</strong> Poppins or Montserrat (700 weight)</p>
+      </div>
+      <div class="token-card">
+        <h3>Font Sizes</h3>
+        <p><strong>H1:</strong> 2.5rem</p>
+        <p><strong>H2:</strong> 1.75rem</p>
+        <p><strong>H3:</strong> 1.25rem</p>
+        <p><strong>Body:</strong> 1rem</p>
+        <p><strong>Small:</strong> 0.875rem</p>
+      </div>
+      <div class="token-card">
+        <h3>Font Weights</h3>
+        <p><strong>Regular:</strong> 400</p>
+        <p><strong>Medium:</strong> 500</p>
+        <p><strong>Semibold:</strong> 600</p>
+        <p><strong>Bold:</strong> 700</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>📏 Spacing Tokens</h2>
+    <div class="tokens">
+      <div class="token-card">
+        <h3>Padding & Margins</h3>
+        <p><strong>XS:</strong> 0.25rem</p>
+        <p><strong>SM:</strong> 0.5rem</p>
+        <p><strong>MD:</strong> 1rem</p>
+        <p><strong>LG:</strong> 1.5rem</p>
+        <p><strong>XL:</strong> 2rem</p>
+      </div>
+      <div class="token-card">
+        <h3>Border Radius</h3>
+        <p><strong>Small:</strong> 6px</p>
+        <p><strong>Medium:</strong> 10px</p>
+        <p><strong>Large:</strong> 16px</p>
+        <p><strong>Pill:</strong> 9999px</p>
+      </div>
+      <div class="token-card">
+        <h3>Shadow</h3>
+        <p><strong>Default:</strong> 0 4px 10px rgba(0,0,0,0.15)</p>
+        <p><strong>Hover:</strong> 0 8px 16px rgba(0,0,0,0.25)</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>✨ Interactive Components</h2>
+    <p>Examples below demonstrate how core tokens apply to buttons, text, and cards.</p>
+
+    <h3>Buttons</h3>
+    <div class="demo-area">
+      <button class="btn btn-accent">Accent Button</button>
+      <button class="btn btn-highlight">Highlight Button</button>
+      <button class="btn btn-outline">Outline Button</button>
+    </div>
+
+    <h3 style="margin-top:1.5rem">Typography</h3>
+    <div class="typography-sample">
+      <h1>Heading One Example</h1>
+      <h2>Heading Two Example</h2>
+      <h3>Heading Three Example</h3>
+      <p>Body text example — this paragraph demonstrates standard readable text using the Inter font family. It supports consistent spacing and accessibility contrast.</p>
+      <p style="font-size:0.875rem;color:#94A3B8;">Small caption text or metadata example.</p>
+    </div>
+
+    <h3 style="margin-top:1.5rem">Card Preview</h3>
+    <div class="demo-area">
+      <div class="demo-card">
+        <h4>Podcast Episode</h4>
+        <p>A demonstration card showing background, border radius, and shadow style in the Midnight Coral theme.</p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const light = [
+      {hex:'#F9FAFB', name:'Background', use:'Page background'},
+      {hex:'#FFFFFF', name:'Surface', use:'Cards / Panels / Navbar'},
+      {hex:'#FB7185', name:'Accent', use:'Buttons / CTAs'},
+      {hex:'#38BDF8', name:'Highlight', use:'Links / Hovers'},
+      {hex:'#E5E7EB', name:'Border', use:'Dividers / Outlines'}
+    ];
+
+    const dark = [
+      {hex:'#0F172A', name:'Background', use:'Page background'},
+      {hex:'#1E293B', name:'Surface', use:'Cards / Panels / Navbar'},
+      {hex:'#FB7185', name:'Accent', use:'Buttons / CTAs'},
+      {hex:'#38BDF8', name:'Highlight', use:'Links / Hovers'},
+      {hex:'#334155', name:'Border', use:'Dividers / Outlines'}
+    ];
+
+    function hexToRgb(hex){
+      const h = hex.replace('#','');
+      const bigint = parseInt(h, 16);
+      const r = (bigint >> 16) & 255;
+      const g = (bigint >> 8) & 255;
+      const b = bigint & 255;
+      return `rgb(${r}, ${g}, ${b})`;
+    }
+
+    function getContrast(hex){
+      const h = hex.replace('#','');
+      const r = parseInt(h.substr(0,2),16), g = parseInt(h.substr(2,2),16), b = parseInt(h.substr(4,2),16);
+      const yiq = (r*299 + g*587 + b*114) / 1000;
+      return yiq >= 150 ? '#0b1222' : '#ffffff';
+    }
+
+    function makeCard({hex, name, use}){
+      const div = document.createElement('div');
+      div.className = 'swatch';
+      div.innerHTML = `
+        <div class="color" style="background:${hex}; color:${getContrast(hex)}">
+          <div class="label">
+            <code>${hex.toUpperCase()}</code>
+            <span>${hexToRgb(hex)}</span>
+          </div>
+        </div>
+        <div class="meta">
+          <div class="name">${name}</div>
+          <div class="use">${use}</div>
+        </div>`;
+      return div;
+    }
+
+    const lg = document.getElementById('light-grid');
+    const dg = document.getElementById('dark-grid');
+    light.map(makeCard).forEach(el => lg.appendChild(el));
+    dark.map(makeCard).forEach(el => dg.appendChild(el));
+  </script>
+</body>
+</html>

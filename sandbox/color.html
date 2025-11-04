@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Podcast Player - Auto Light/Dark Theme</title>
+  <style>
+    /* ============================
+       🌞 Default Light Theme
+       ============================ */
+    :root {
+      --color-bg: #F9FAFB;
+      --color-surface: #FFFFFF;
+      --color-accent: #FB7185;
+      --color-highlight: #38BDF8;
+      --color-text-primary: #111827;
+      --color-text-secondary: #4B5563;
+      --color-border: #E5E7EB;
+    }
+
+    /* 🌙 Dark Theme (System Preference Only) */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-bg: #0F172A;
+        --color-surface: #1E293B;
+        --color-accent: #FB7185;
+        --color-highlight: #38BDF8;
+        --color-text-primary: #F8FAFC;
+        --color-text-secondary: #94A3B8;
+        --color-border: #334155;
+      }
+    }
+
+    /* 🌓 Manual Override (Always Applies When Set) */
+    [data-theme='dark'] {
+      --color-bg: #0F172A !important;
+      --color-surface: #1E293B !important;
+      --color-accent: #FB7185 !important;
+      --color-highlight: #38BDF8 !important;
+      --color-text-primary: #F8FAFC !important;
+      --color-text-secondary: #94A3B8 !important;
+      --color-border: #334155 !important;
+    }
+
+    [data-theme='light'] {
+      --color-bg: #F9FAFB !important;
+      --color-surface: #FFFFFF !important;
+      --color-accent: #FB7185 !important;
+      --color-highlight: #38BDF8 !important;
+      --color-text-primary: #111827 !important;
+      --color-text-secondary: #4B5563 !important;
+      --color-border: #E5E7EB !important;
+    }
+
+    * {
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+
+    body {
+      background-color: var(--color-bg);
+      color: var(--color-text-primary);
+      font-family: 'Inter', 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar {
+      background-color: var(--color-surface);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--color-border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar a {
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      margin: 0 1rem;
+      transition: color 0.3s ease;
+    }
+
+    .navbar a:hover {
+      color: var(--color-highlight);
+    }
+
+    #themeToggle {
+      background: var(--color-accent);
+      color: var(--color-text-primary);
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    #themeToggle:hover {
+      background-color: var(--color-highlight);
+      color: var(--color-bg);
+    }
+
+    .hero {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: linear-gradient(180deg, var(--color-bg) 0%, var(--color-surface) 100%);
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      color: var(--color-highlight);
+    }
+
+    .hero p {
+      color: var(--color-text-secondary);
+      font-size: 1.2rem;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      padding: 2rem;
+    }
+
+    .card {
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 1rem;
+      padding: 1rem;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+    }
+
+    .card img {
+      width: 100%;
+      border-radius: 0.75rem;
+    }
+
+    .card h3 {
+      margin-top: 0.75rem;
+      color: var(--color-text-primary);
+    }
+
+    .card p {
+      color: var(--color-text-secondary);
+    }
+
+    .player {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: var(--color-surface);
+      border-top: 1px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1.5rem;
+    }
+
+    .player button {
+      background-color: var(--color-accent);
+      color: var(--color-text-primary);
+      border: none;
+      border-radius: 50%;
+      width: 45px;
+      height: 45px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .player button:hover {
+      background-color: var(--color-highlight);
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo">🎧 PodcastPlayer</div>
+    <div class="nav-links">
+      <a href="#">Home</a>
+      <a href="#">Queue</a>
+      <a href="#">Favorites</a>
+    </div>
+    <button id="themeToggle">🌓</button>
+  </nav>
+
+  <section class="hero">
+    <h1>Discover Your Next Favorite Podcast</h1>
+    <p>Search. Listen. Queue. Repeat.</p>
+  </section>
+
+  <section class="card-grid">
+    <div class="card">
+      <img src="https://placehold.co/400x250/1E293B/F8FAFC?text=Episode+1" alt="Podcast Episode 1">
+      <h3>Episode 1: The Future of Audio</h3>
+      <p>Duration: 35m · Host: Jane Doe</p>
+    </div>
+
+    <div class="card">
+      <img src="https://placehold.co/400x250/1E293B/F8FAFC?text=Episode+2" alt="Podcast Episode 2">
+      <h3>Episode 2: Streaming Revolution</h3>
+      <p>Duration: 42m · Host: Alex Rivera</p>
+    </div>
+
+    <div class="card">
+      <img src="https://placehold.co/400x250/1E293B/F8FAFC?text=Episode+3" alt="Podcast Episode 3">
+      <h3>Episode 3: Building Better Sound</h3>
+      <p>Duration: 28m · Host: Sarah Lee</p>
+    </div>
+  </section>
+
+  <footer class="player">
+    <button>⏮</button>
+    <button>⏯</button>
+    <button>⏭</button>
+  </footer>
+
+  <script>
+    const toggle = document.getElementById('themeToggle');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    let currentTheme = localStorage.getItem('theme') || (prefersDark ? 'dark' : 'light');
+
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      toggle.textContent = theme === 'dark' ? '🌞' : '🌙';
+      localStorage.setItem('theme', theme);
+    }
+
+    toggle.addEventListener('click', () => {
+      currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      applyTheme(currentTheme);
+    });
+
+    applyTheme(currentTheme);
+  </script>
+</body>
+</html>
