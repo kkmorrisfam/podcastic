@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@theme {
+/* @theme {
     --color-txPrimary: theme(colors.stone.900);
     --color-txSecondary: theme(colors.stone.800);
     --color-bgPrimary: theme(colors.stone.300);
@@ -14,7 +14,45 @@
     --color-bgPrimary: theme(colors.stone.900);
     --color-bgSecondary: theme(colors.stone.800);
   }
-}
+} */
 
 /* to reference these theme variables, example:
    bg-bgPrimary text-txPrimary */
+
+@theme {
+  --color-bg: #F9FAFB;
+  --color-surface: #FFFFFF;
+  --color-accent: #FB7185;
+  --color-highlight: #38BDF8;
+  --color-text-primary: #111827;
+  --color-text-secondary: #4B5563;
+  --color-border: #E5E7EB;
+}
+
+@media (prefers-color-scheme: dark) {
+  @theme {
+        --color-bg: #0F172A;
+        --color-surface: #1E293B;
+        --color-accent: #FB7185;
+        --color-highlight: #38BDF8;
+        --color-text-primary: #F8FAFC;
+        --color-text-secondary: #94A3B8;
+        --color-border: #334155;
+
+  }
+}
+
+/*  Global reset or shared rules */
+@layer base {  
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text-primary);
+    font-family: 'Inter', 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease,
+      border-color 0.3s ease;
+  }
+}
