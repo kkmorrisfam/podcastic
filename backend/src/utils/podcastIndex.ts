@@ -27,7 +27,7 @@ export function getHeaders() {
 
     return {
         'User-Agent': 'Podcastic/1.0',
-        'X-Auth-Date': now,
+        'X-Auth-Date': String(now),
         'X-Auth-Key': key,
         'Authorization': hash,
         'Content-Type': 'application/json',
