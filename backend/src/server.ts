@@ -14,6 +14,8 @@ const PORT = process.env.PORT || 5050
 //middleware
 //cors allows fontend to call backend
 /***WILL NEED TO CHANGE FOR PRODUCTION**/
+app.use(cors({ origin: process.env.CORS_ORIGIN }));
+app.use(express.json());
 
 const allowedOrigins = [
       //add production url
@@ -35,10 +37,7 @@ app.get('/', (req, res) => {
   res.send('Server is running.')
 });
 
-app.use('/api/podcast', podcastRoutes);
-
-
-
+app.use('/api', podcastRoutes);
 
 // only runs if someone requests a path that doesn't exist
 app.use((req: Request, res: Response) => res.status(404).json({error: 'Route Not Found'}));
