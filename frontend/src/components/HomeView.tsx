@@ -14,7 +14,7 @@ export default function HomeView() {
 
   const fetchTrending = async () => {
     setLoading(true);
-    const res = await fetch("/api/trending");
+    const res = await fetch("http://localhost:5050/api/podcast/trending");
     const data = await res.json();
     setPodcasts(data.feeds || []);
     setLoading(false);
@@ -25,36 +25,37 @@ export default function HomeView() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text-primary)] transition-colors duration-300">
-      {/* <header className="w-full p-6 bg-[var(--color-surface)] border-b border-[var(--color-border)] shadow-sm sticky top-0 z-10">
-        <h1 className="text-3xl font-bold text-center tracking-tight">
-          Podcastic
-        </h1>
-      </header> */}
+    <main className="flex flex-col items-center justify-center px-4 py-10">
+      <h2 className="text-2xl font-bold mb-6 text-[var(--color-text-primary)]">
+        Trending Podcasts
+      </h2>
 
-      <section className="p-6">
-        {/* <h2 className="text-2xl font-bold text-center mt-6 mb-4">
-          Trending Podcasts
-        </h2> */}
-
-        {loading ? (
-          <p className="text-center text-lg text-[var(--color-text-secondary)]">
-            Loading podcasts...
-          </p>
-        ) : (
-          <div
-            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-8"
-            style={{ justifyItems: "center" }}
-          >
-            {podcasts.map((p) => (
-              <div key={p.id} className="podcast-card w-full max-w-sm">
-                <img
-                  src={p.image}
-                  alt={p.title}
-                  className="w-full h-52 object-cover rounded-xl mb-3"
-                />
-                <h2>{p.title}</h2>
-                <p>{p.author}</p>
+      {loading ? (
+        <p className="text-center text-lg text-[var(--color-text-secondary)]">
+          Loading podcasts...
+        </p>
+      ) : (
+        <div
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 w-full max-w-6xl"
+          style={{ justifyItems: "center" }}
+        >
+          {podcasts.map((p) => (
+            <div
+              key={p.id}
+              className="podcast-card rounded-xl overflow-hidden shadow hover:shadow-lg bg-[var(--color-surface)] transition-all duration-200"
+            >
+              <img
+                src={p.image}
+                alt={p.title}
+                className="w-full h-48 object-cover"
+              />
+              <div className="p-4">
+                <h3 className="font-semibold text-lg mb-1 truncate">
+                  {p.title}
+                </h3>
+                <p className="text-sm text-[var(--color-text-secondary)] mb-2 truncate">
+                  {p.author}
+                </p>
                 <a
                   href={p.url}
                   target="_blank"
@@ -64,10 +65,10 @@ export default function HomeView() {
                   Visit Podcast →
                 </a>
               </div>
-            ))}
-          </div>
-        )}
-      </section>
+            </div>
+          ))}
+        </div>
+      )}
     </main>
   );
 }
