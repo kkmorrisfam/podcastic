@@ -1,46 +1,51 @@
 @import "tailwindcss";
+@import './styles/base.css';
 
-/* @theme {
-    --color-txPrimary: theme(colors.stone.900);
-    --color-txSecondary: theme(colors.stone.800);
-    --color-bgPrimary: theme(colors.stone.300);
-    --color-bgSecondary: theme(colors.stone.100);
-}
-
-@media (prefers-color-scheme: dark) {
-  @theme {
-    --color-txPrimary: theme(colors.stone.100);
-    --color-txSecondary: theme(colors.stone.300);
-    --color-bgPrimary: theme(colors.stone.900);
-    --color-bgSecondary: theme(colors.stone.800);
-  }
-} */
-
-/* to reference these theme variables, example:
-   bg-bgPrimary text-txPrimary */
 
 @theme {
-  --color-bg: #F9FAFB;
-  --color-surface: #FFFFFF;
-  --color-accent: #FB7185;
-  --color-highlight: #38BDF8;
-  --color-text-primary: #111827;
-  --color-text-secondary: #4B5563;
-  --color-border: #E5E7EB;
+  --color-bg: theme(colors.stone.50);
+  --color-surface: theme(colors.white);  
+  --color-accent: theme(colors.red.400);  
+  --color-highlight: theme(colors.sky.400);
+  --color-text-primary: theme(colors.stone.900);
+  --color-text-secondary: theme(colors.stone.600);
+  --color-border: theme(colors.stone.300);
 }
 
+/* changes base color scheme with system theme*/
 @media (prefers-color-scheme: dark) {
   @theme {
-        --color-bg: #0F172A;
-        --color-surface: #1E293B;
-        --color-accent: #FB7185;
-        --color-highlight: #38BDF8;
-        --color-text-primary: #F8FAFC;
-        --color-text-secondary: #94A3B8;
-        --color-border: #334155;
+        --color-bg: theme(colors.slate.950);
+        --color-surface: theme(colors.slate.800);
+        --color-accent: theme(colors.red.400);
+        --color-highlight: theme(colors.sky.400);
+        --color-text-primary: theme(colors.slate.50);
+        --color-text-secondary: theme(colors.slate.400);
+        --color-border: theme(colors.slate.700);
 
   }
 }
+
+/* Manual override light/dark theme button*/
+[data-theme="light"] {
+  --color-bg: theme(colors.stone.50);
+  --color-surface: theme(colors.white);
+  --color-accent: theme(colors.red.400);
+  --color-highlight: theme(colors.sky.400);
+  --color-text-primary: theme(colors.stone.900);
+  --color-text-secondary: theme(colors.stone.600);
+  --color-border: theme(colors.stone.300);
+}
+[data-theme="dark"] {
+  --color-bg: theme(colors.slate.950);
+  --color-surface: theme(colors.slate.800);
+  --color-accent: theme(colors.red.400);
+  --color-highlight: theme(colors.sky.400);
+  --color-text-primary: theme(colors.slate.50);
+  --color-text-secondary: theme(colors.slate.400);
+  --color-border: theme(colors.slate.700);
+}
+
 
 /*  Global reset or shared rules */
 @layer base {  
