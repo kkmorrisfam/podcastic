@@ -1,8 +1,9 @@
-import { Router } from "express";
-import { searchByTerm } from "../controllers/podcast.controller.js";
+import express from "express";
+import { getTrending, searchByTerm } from "../controllers/podcast.controller.js";
 
-const router = Router();
-router.get('/search', searchByTerm);
+const router = express.Router();
 
+router.get("/trending", getTrending);
+router.get("/search", searchByTerm);
 
 export default router;

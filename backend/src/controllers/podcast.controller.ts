@@ -1,44 +1,110 @@
-import type { Request, Response } from 'express';
-import { API_BASE, getHeaders } from '../utils/podcastIndex.js'
-import { cacheGetJSON, cacheSetJSON, makeKey } from '../utils/cache.js';
+import type { Request, Response } from "express";
+import crypto from "crypto";
+import dotenv from "dotenv";
 
-// GET api 
-export async function searchByTerm(req: Request, res: Response) {
-    try {
-        //get term in url
-        const rawTerm = (req.query.term ?? 'christmas') as string;
-        const term = rawTerm.trim();
+dotenv.config();
 
-        //build cache key
-        const key = makeKey('byterm', term.toLowerCase());
+// ✅ Environment variable validation
+if (!process.env.PODCAST_INDEX_KEY || !process.env.PODCAST_INDEX_SECRET) {
+  console.error("❌ Missing Podcast Index credentials in .env file!");
+  console.error("Make sure these exist:");
+  console.error("PODCAST_INDEX_KEY=xxxx");
+  console.error("PODCAST_INDEX_SECRET='erD$Q$pNXq9nUrqWHFztt66YEK9NaSH92F#jXQMs'");
+  process.exit(1);
+}
 
-        // try to retrieve from cache first
-        const cached = await cacheGetJSON<any>(key);
-        if (cached) {
-             res.setHeader('X-Cache', 'HIT');  //just meta data for info, not necessary
-            return res.json(cached);
-        }
+const API_BASE = process.env.PODCAST_INDEX_BASE!;
+const API_KEY = process.env.PODCAST_INDEX_KEY!;
+const API_SECRET = process.env.PODCAST_INDEX_SECRET!;
 
-        // if not cached, call Podcast Index API
-        const url = `${API_BASE}/search/byterm?q=${encodeURIComponent(term)}`;
-        const response = await fetch(url, { headers: getHeaders() });
+/**
+ * Build headers for Podcast Index API authentication
+ */
+function getHeaders() {
+  const now = Math.floor(Date.now() / 1000);
 
+  // ✅ Debug log to confirm values are valid
+  if (!API_KEY || !API_SECRET) {
+    console.error("❌ Missing API key or secret in getHeaders()");
+    throw new Error("Missing Podcast Index credentials");
+  }
 
-        if(!response.ok) {
-            const text = await response.text().catch(()=> '');
-            throw new Error(`Podcast Index error ${response.status}: ${text || response.statusText}`);
-        }
+  // Defensive check for numeric time
+  if (Number.isNaN(now)) {
+    console.error("❌ Invalid timestamp generated for hashing");
+    throw new Error("Invalid timestamp");
+  }
 
-        const data = await response.json();
+  const hash = crypto
+    .createHash("sha1")
+    .update(API_KEY + API_SECRET + now.toString()) // ✅ ensure now is a string
+    .digest("hex");
 
-        //save cache for next time
-        await cacheSetJSON(key, data);
+  return {
+    "User-Agent": "PodcasticApp/1.0",
+    "X-Auth-Date": now.toString(),
+    "X-Auth-Key": API_KEY,
+    Authorization: hash,
+  };
+}
 
-        res.setHeader('X-Cache', 'MISS');  //just meta data for info, not necessary
-        return res.json(data);
-        
-    } catch (error:any) {
-        console.error('[searchByTerm]', error?.message || error);
-        return res.status(500).json({error: error?.message || 'Internal Server Error'});       
+/**
+ * GET /api/podcast/trending
+ * Fetches trending podcasts from Podcast Index API
+ */
+export async function getTrending(_req: Request, res: Response) {
+  try {
+    const response = await fetch(`${API_BASE}/podcasts/trending?max=20`, {
+      headers: getHeaders(),
+    });
+
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(`API responded with ${response.status}: ${text}`);
     }
+
+    const data = await response.json();
+    return res.json(data);
+  } catch (err) {
+    console.error("[getTrending] Error:", err);
+
+    // fallback demo data for local testing
+    return res.json({
+      feeds: [
+        {
+          id: 1,
+          title: "Sample Podcast",
+          author: "Demo Author",
+          image: "https://placehold.co/600x400?text=Podcast+1",
+          url: "#",
+        },
+      ],
+    });
+  }
+}
+
+/**
+ * GET /api/podcast/search?term=christmas
+ * Fetches podcasts by search term from Podcast Index API
+ */
+export async function searchByTerm(req: Request, res: Response) {
+  try {
+    const term = (req.query.term ?? "christmas") as string;
+
+    const response = await fetch(
+      `${API_BASE}/search/byterm?q=${encodeURIComponent(term)}`,
+      { headers: getHeaders() }
+    );
+
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(`API responded with ${response.status}: ${text}`);
+    }
+
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    console.error("[searchByTerm] Error:", err);
+    res.status(500).json({ error: "Failed to search podcasts" });
+  }
 }

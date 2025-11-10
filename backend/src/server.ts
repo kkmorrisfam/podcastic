@@ -1,60 +1,27 @@
-import express from 'express'
-import dotenv from 'dotenv'
-import cors from 'cors'
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import podcastRoutes from "./routes/podcast.routes.js";
 
-import type { Request, Response } from 'express';
-import podcastRoutes from './routes/podcast.routes.js';
+dotenv.config();
 
+const app = express();
+const PORT = process.env.PORT || 5050;
 
-dotenv.config()
-
-const app = express()
-const PORT = process.env.PORT || 5050
-
-//middleware
-//cors allows fontend to call backend
-/***WILL NEED TO CHANGE FOR PRODUCTION**/
-
-const allowedOrigins = [
-      //add production url
-      "http://localhost:3000", // for local dev testing if needed
-    ];
-
-app.use(cors({
-    origin: allowedOrigins,  
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    exposedHeaders: ['X-Cache'],
-    maxAge: 86400,
-}));
-
+app.use(cors({ origin: process.env.CORS_ORIGIN }));
 app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.send('Server is running.')
+// ✅ Mount routes
+app.use("/api/podcast", podcastRoutes);
+
+// Root
+app.get("/", (_req, res) => {
+  res.send("🎧 Podcastic API is running!");
 });
 
-app.use('/api/podcast', podcastRoutes);
-
-
-
-
-// only runs if someone requests a path that doesn't exist
-app.use((req: Request, res: Response) => res.status(404).json({error: 'Route Not Found'}));
-
-//middleware for thrown errors
-app.use((err: any, req: Request, res: Response, next: any) => {
-  console.error('[Error middleware]', err);
-  res.status(err.status || 500).json({
-    error: {
-      status: err.status || 500,
-      message: err.message || 'Internal Server Error',
-    },
-  });
-});
-
+// 404 handler (MUST be last)
+app.use((_req, res) => res.status(404).json({ error: "Route Not Found" }));
 
 app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`)
-})
+  console.log(`✅ Backend listening on http://localhost:${PORT}`);
+});
