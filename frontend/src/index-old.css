@@ -162,19 +162,3 @@
     color 0.3s ease,
     border-color 0.3s ease;
 }
-
-  .logo-title {
-    font-family: 'Oregano', cursive;
-    font-size: 2.5rem;
-    letter-spacing: 1px;
-  }
-
-  .logo-tag {
-    font-family: "Montserrat", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 300;
-    font-style: normal;
-    font-size: 1.5rem;
-  }
-
-
