@@ -63,6 +63,15 @@
   }
   .player button:hover { background-color: var(--color-highlight); }
 
+  .container {
+     width: 100%;
+    max-width: 72rem;         /* 1152px */
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;       /* px-4 */
+    padding-right: 1rem;
+  }
+
   /* ==========================================================
    Podcast Grid (Auto-fit Fluid Layout)
    ========================================================== */

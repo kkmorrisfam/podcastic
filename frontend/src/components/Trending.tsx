@@ -43,6 +43,7 @@ export default function Trending() {
 
   return (
     <section className="w-full px-4 py-10 bg-[var(--color-bg)]">
+      <div className="container">
       <h2 className="text-2xl font-bold mb-8 text-center text-[var(--color-text-primary)]">
         Trending Podcasts
       </h2>
@@ -86,6 +87,7 @@ export default function Trending() {
           ))}
         </div>
       )}
+      </div>
     </section>
   );
 }
