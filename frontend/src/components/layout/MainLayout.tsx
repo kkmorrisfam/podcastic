@@ -11,7 +11,7 @@ export default function MainLayout() {
       <div className="w-full max-w-7xl p-4">
         <TopBar    />
           <main className="grow p-4">      
-            {/* <Outlet />  */}
+            <Outlet /> 
           </main>
         <Footer />
       </div>
