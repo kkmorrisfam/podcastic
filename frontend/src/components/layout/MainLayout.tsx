@@ -6,17 +6,16 @@ import Footer from '../Footer';
 
 export default function MainLayout() {
   return (
-    <>
-    <TopBar />
-        <Outlet />
-    <Footer />
-    {/* <div className="min-h-screen flex flex-col">
-      <TopBar    />
-      <main className="grow p-4">
-        <Outlet /> This renders the current page.  This is whatever is found in <Route /> in the App.tsx file 
-      </main>
-      <Footer />
-    </div> */}
+    <>   
+    <div className="min-h-screen flex flex-col bg-bg text-text-primary items-center">
+      <div className="w-full max-w-7xl p-4">
+        <TopBar    />
+          <main className="grow p-4">      
+            {/* <Outlet />  */}
+          </main>
+        <Footer />
+      </div>
+    </div>
     </>
   );
 }

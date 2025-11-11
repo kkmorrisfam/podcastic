@@ -6,7 +6,7 @@ import Trending from "./components/Trending";
 export default function App() {
     return(
         <>
-            <div className="min-h-screen flex flex-col" >
+            {/* <div className="min-h-screen flex flex-col" > */}
                
                   <Routes>
                     {/* All pages share the MainLayout */}
@@ -19,7 +19,7 @@ export default function App() {
                     </Route>
                   </Routes>
                 
-            </div>
+            {/* </div> */}
         </>
     )
 }

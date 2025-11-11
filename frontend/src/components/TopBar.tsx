@@ -4,8 +4,11 @@ import NavBar from "./NavBar";
 
 export default function TopBar() {
     return (
-        <><header className="w-full py-6 shadow bg-surface mb-8">
-            <div className="max-w-6xl mx-auto flex justify-between items-center px-6">
+        <>
+        <header className="w-full shadow bg-surface mb-8">
+        {/* <header className="navbar"> */}
+            <div className="container flex items-center justify-between gap-4 px-4">
+            {/* <div> */}
                 <Logo />
              <NavBar />
            </div>

@@ -13,6 +13,29 @@
   --color-border: theme(colors.stone.300);
 }
 
+
+@layer base {  
+  html,
+  body,
+  #root {
+    height: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
+  } 
+ 
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text-primary);
+    font-family: 'Inter', 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease,
+      border-color 0.3s ease;
+  }
+}
+
 /* changes base color scheme with system theme*/
 @media (prefers-color-scheme: dark) {
   @theme {
@@ -23,12 +46,12 @@
         --color-text-primary: theme(colors.slate.50);
         --color-text-secondary: theme(colors.slate.400);
         --color-border: theme(colors.slate.700);
-
-  }
+}
+  
 }
 
 /* Manual override light/dark theme button*/
-[data-theme="light"] {
+/* [data-theme="light"] {
   --color-bg: theme(colors.stone.50);
   --color-surface: theme(colors.white);
   --color-accent: theme(colors.red.400);
@@ -45,50 +68,9 @@
   --color-text-primary: theme(colors.slate.50);
   --color-text-secondary: theme(colors.slate.400);
   --color-border: theme(colors.slate.700);
-}
+} */
 
 /*  Global reset or shared rules */
-@layer base {  
-  body {
-    background-color: var(--color-bg);
-    color: var(--color-text-primary);
-    font-family: 'Inter', 'Poppins', sans-serif;
-    margin: 0;
-    padding: 0;
-    transition:
-      background-color 0.3s ease,
-      color 0.3s ease,
-      border-color 0.3s ease;
-  }
-}
-
-/*  Global reset or shared rules */
-@layer base {
-  html,
-  body,
-  #root {
-    height: 100%;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  body {
-    background-color: var(--color-bg);
-    color: var(--color-text-primary);
-    font-family: 'Inter', 'Poppins', sans-serif;
-    margin: 0;
-    padding: 0;
-    display: block;
-    /* display: flex; */
-    /* flex-direction: column; */
-    /* align-items: center; */
-    /* justify-content: flex-start; you can switch to center if desired */
-    transition:
-      background-color 0.3s ease,
-      color 0.3s ease,
-      border-color 0.3s ease;
-  }
-}
 
 
 
