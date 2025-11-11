@@ -1,4 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { Component, useEffect, useState } from "react";
+import { data } from "react-router";
+
+// Podcast interface defines the shape of podcast data
+// retrieved from the PodcastIndex API.
 
 interface Podcast {
   id: number;
@@ -8,16 +12,29 @@ interface Podcast {
   url: string;
 }
 
+// HomeView component
+// Displays the "Trending Podcasts" section on the home page.
+// Fetches podcast data from the backend and renders reponsive podcast cards.
+
 export default function HomeView() {
   const [podcasts, setPodcasts] = useState<Podcast[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchTrending = async () => {
-    setLoading(true);
-    const res = await fetch("http://localhost:5050/api/podcast/trending");
-    const data = await res.json();
-    setPodcasts(data.feeds || []);
-    setLoading(false);
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await fetch("http://localhost:5050/api/podcast/trending");
+      if (!res.ok) throw new Error("Failed to fetch podcasts");
+      const data = await res.json();
+      setPodcasts(data.feeds || []);
+    } catch (err) {
+      console.error(err);
+      setError("Unable to load podcasts. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -25,25 +42,25 @@ export default function HomeView() {
   }, []);
 
   return (
-    <main className="flex flex-col items-center justify-center px-4 py-10">
-      <h2 className="text-2xl font-bold mb-6 text-[var(--color-text-primary)]">
+    <section className="w-full px-4 py-10 bg-[var(--color-bg)]">
+      <h2 className="text-2xl font-bold mb-8 text-center text-[var(--color-text-primary)]">
         Trending Podcasts
       </h2>
 
-      {loading ? (
-        <p className="text-center text-lg text-[var(--color-text-secondary)]">
+      {loading && (
+        <p className="text-center text-lg text-[var(--color-text-secondary)] animate-pulse">
           Loading podcasts...
         </p>
-      ) : (
-        <div
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 w-full max-w-6xl"
-          style={{ justifyItems: "center" }}
-        >
+      )}
+
+      {error && (
+        <p className="text-center text-red-400 mt-4">{error}</p>
+      )}
+
+      {!loading && !error && (
+        <div className="trending-grid">
           {podcasts.map((p) => (
-            <div
-              key={p.id}
-              className="podcast-card rounded-xl overflow-hidden shadow hover:shadow-lg bg-[var(--color-surface)] transition-all duration-200"
-            >
+            <div key={p.id} className="podcast-card">
               <img
                 src={p.image}
                 alt={p.title}
@@ -69,6 +86,6 @@ export default function HomeView() {
           ))}
         </div>
       )}
-    </main>
+    </section>
   );
 }
