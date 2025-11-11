@@ -20,6 +20,11 @@ const allowedOrigins = [
       "http://localhost:3000", // for local dev testing if needed
     ];
 
+// Root
+app.get("/", (_req, res) => {
+  res.send("🎧 Podcastic API is running!");
+});
+
 app.use(cors({
     origin: allowedOrigins,  
     credentials: true,
@@ -40,8 +45,10 @@ app.use('/api/podcast', podcastRoutes);
 
 
 
-// only runs if someone requests a path that doesn't exist
-app.use((req: Request, res: Response) => res.status(404).json({error: 'Route Not Found'}));
+// Root
+app.get("/", (_req, res) => {
+  res.send("🎧 Podcastic API is running!");
+});
 
 //middleware for thrown errors
 app.use((err: any, req: Request, res: Response, next: any) => {
