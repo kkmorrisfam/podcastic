@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 5050;
 app.use(cors({ origin: process.env.CORS_ORIGIN }));
 app.use(express.json());
 
-// ✅ Mount routes
+// Mount routes
 app.use("/api/podcast", podcastRoutes);
 
 // Root
@@ -23,5 +23,5 @@ app.get("/", (_req, res) => {
 app.use((_req, res) => res.status(404).json({ error: "Route Not Found" }));
 
 app.listen(PORT, () => {
-  console.log(`✅ Backend listening on http://localhost:${PORT}`);
+  console.log(`Backend listening on http://localhost:${PORT}`);
 });

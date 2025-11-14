@@ -4,9 +4,9 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-// ✅ Environment variable validation
+// Environment variable validation
 if (!process.env.PODCAST_INDEX_KEY || !process.env.PODCAST_INDEX_SECRET) {
-  console.error("❌ Missing Podcast Index credentials in .env file!");
+  console.error("Missing Podcast Index credentials in .env file!");
   console.error("Make sure these exist:");
   console.error("PODCAST_INDEX_KEY=xxxx");
   console.error("PODCAST_INDEX_SECRET='erD$Q$pNXq9nUrqWHFztt66YEK9NaSH92F#jXQMs'");
@@ -23,21 +23,21 @@ const API_SECRET = process.env.PODCAST_INDEX_SECRET!;
 function getHeaders() {
   const now = Math.floor(Date.now() / 1000);
 
-  // ✅ Debug log to confirm values are valid
+  // Debug log to confirm values are valid
   if (!API_KEY || !API_SECRET) {
-    console.error("❌ Missing API key or secret in getHeaders()");
+    console.error("Missing API key or secret in getHeaders()");
     throw new Error("Missing Podcast Index credentials");
   }
 
   // Defensive check for numeric time
   if (Number.isNaN(now)) {
-    console.error("❌ Invalid timestamp generated for hashing");
+    console.error("Invalid timestamp generated for hashing");
     throw new Error("Invalid timestamp");
   }
 
   const hash = crypto
     .createHash("sha1")
-    .update(API_KEY + API_SECRET + now.toString()) // ✅ ensure now is a string
+    .update(API_KEY + API_SECRET + now.toString()) // ensure now is a string
     .digest("hex");
 
   return {
@@ -82,6 +82,14 @@ export async function getTrending(_req: Request, res: Response) {
     });
   }
 }
+
+async function fetchFromPodcastIndex(endpoint: string) {
+  const url = `${API_BASE}${endpoint}`;
+  const res = await fetch(url, { headers: getHeaders() });
+  if (!res.ok) throw new Error(`PodcastIndex error ${res.status}`);
+  return res.json();
+}
+
 
 /**
  * GET /api/podcast/search?term=christmas
