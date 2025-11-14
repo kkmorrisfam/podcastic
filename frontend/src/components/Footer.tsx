@@ -1,12 +1,16 @@
-import React from 'react'
+import Player from './Player'
 
 const Footer = () => {
   return (
     <>
-      <footer className="w-full mt-8 py-6 border-t border-[var(--color-border)] bg-[var(--color-surface)]">
-        <div className="max-w-6xl mx-auto text-center text-[var(--color-text-secondary)] text-sm">
+      <footer className="w-full mt-8 py-6 border-t border-border bg-bg">
+        <div className="max-w-6xl mx-auto text-center text-text-secondary text-sm">          
+          <Player />
+        </div>
+        <div className="w-full mt-8 py-6 border-t border-border bg-bg">
           © {new Date().getFullYear()} Podcastic | Kerri & Erik
         </div>
+
       </footer>
     </>
   )
