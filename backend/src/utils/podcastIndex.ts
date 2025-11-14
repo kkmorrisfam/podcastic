@@ -3,8 +3,8 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// console.log("🔑 Key:", process.env.PODCAST_INDEX_KEY);
-// console.log("🔒 Secret:", process.env.PODCAST_INDEX_SECRET);
+// console.log("Key:", process.env.PODCAST_INDEX_KEY);
+// console.log("Secret:", process.env.PODCAST_INDEX_SECRET);
 
 
 export function getHeaders() {    
@@ -35,3 +35,32 @@ export function getHeaders() {
 }
 
 export const API_BASE = "https://api.podcastindex.org/api/1.0";
+
+// ------------------------------------------------------
+// Internal helper for calling PodcastIndex
+// ------------------------------------------------------
+async function fetchFromPodcastIndex(endpoint: string) {
+  const url = `${API_BASE}${endpoint}`;
+  const response = await fetch(url, { headers: getHeaders() });
+
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`PodcastIndex error ${response.status}: ${text}`);
+  }
+
+  return response.json();
+}
+
+// -----------------------------------------------------
+// Search Podcasts
+// GET /search/byterm?q=foo
+// ------------------------------------------------------
+export async function searchPodcastIndex(term: string) {
+  if (!term || term.trim() === "") {
+    throw new Error("Search term is required");
+  }
+
+  return fetchFromPodcastIndex(
+    `/search/byterm?q=${encodeURIComponent(term)}`
+  );
+} 
