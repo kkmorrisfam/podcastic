@@ -13,15 +13,15 @@ const testAudioUrl = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.
       </div>
       <div>
         {/* Back 15sec control*/}
-        <p>⏪🔄️</p>
+       
       </div>
       <div>
         {/* Play Button/Icon control*/}
-        <p>▶️</p>
+       
       </div>
       <div>
         {/* Forward 15sec control*/}
-        <p>🔄️⏩</p>
+       
       </div>
       <div>
           <div>
