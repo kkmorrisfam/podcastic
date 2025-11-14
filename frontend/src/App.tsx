@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import HomeView from "./components/HomeView";
+import SearchView from "./components/SearchView";
 import MainLayout from "./components/layout/MainLayout";
 import Trending from "./components/Trending";
 
@@ -14,7 +15,7 @@ export default function App() {
                       <Route path="/" element={<HomeView />} />
                       <Route path="/trending" element={<Trending/>} />
                       {/* ********Any route to a page that shares the MainLayout ******* */}
-                      {/* <Route path="/search" element={<Search />} /> */}
+                      <Route path="/search" element={<SearchView />} />
                       {/* <Route path="/favorites" element={<Favorites />} /> */}
                     </Route>
                   </Routes>
