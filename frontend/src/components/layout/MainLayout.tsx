@@ -9,11 +9,14 @@ export default function MainLayout() {
     <>   
     <div className="min-h-screen flex flex-col bg-bg text-text-primary items-center">
       <div className="w-full max-w-7xl p-4">
-        <TopBar    />
-          <main className="grow p-4">      
-            <Outlet /> 
-          </main>
-        <Footer />
+        <TopBar />
+      <div/>
+        <main className=" =flex-1 p-4 max-w-7x1 mx-auto ">      
+          <Outlet /> 
+        </main>
+        <div className='w-full max-w-7x1 mx-auto sticky bottom-0'>
+          <Footer />
+        </div>
       </div>
     </div>
     </>
