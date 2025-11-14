@@ -3,8 +3,8 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// console.log("🔑 Key:", process.env.PODCAST_INDEX_KEY);
-// console.log("🔒 Secret:", process.env.PODCAST_INDEX_SECRET);
+// console.log("Key:", process.env.PODCAST_INDEX_KEY);
+// console.log("Secret:", process.env.PODCAST_INDEX_SECRET);
 
 
 export function getHeaders() {    
