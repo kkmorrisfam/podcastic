@@ -1,4 +1,5 @@
-
+import { RiForward15Line, RiReplay15Line  } from "react-icons/ri";
+import { FaPlay, FaPause  } from "react-icons/fa6";
 
 const Player = () => {
 // need to update state for isPlaying, currentEpisode, queue[]
@@ -13,15 +14,16 @@ const testAudioUrl = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.
       </div>
       <div>
         {/* Back 15sec control*/}
-       
+        <RiReplay15Line />
       </div>
       <div>
-        {/* Play Button/Icon control*/}
-       
+        {/* Play Button/Icon control  If isPlaying=true then show pause button, if isPlaying=false then show play button*/}
+        <FaPlay />
+        <FaPause />
       </div>
       <div>
         {/* Forward 15sec control*/}
-       
+        <RiForward15Line />
       </div>
       <div>
           <div>
