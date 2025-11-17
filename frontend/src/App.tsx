@@ -3,6 +3,7 @@ import HomeView from "./components/HomeView";
 import SearchView from "./components/SearchView";
 import MainLayout from "./components/layout/MainLayout";
 import Trending from "./components/Trending";
+import PodcastDetailView from "./components/PodcastDetailView";
 
 export default function App() {
     return(
@@ -17,6 +18,7 @@ export default function App() {
                       {/* ********Any route to a page that shares the MainLayout ******* */}
                       <Route path="/search" element={<SearchView />} />
                       {/* <Route path="/favorites" element={<Favorites />} /> */}
+                      <Route path="/podcast/:id" element={<PodcastDetailView />} />
                     </Route>
                   </Routes>
                 

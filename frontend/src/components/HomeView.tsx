@@ -6,6 +6,8 @@ import {
   isFavorite,
 } from "../utils/storage";
 
+import { Link } from "react-router-dom";
+
 // Interface for podcast data from backend
 interface Podcast {
   id: number;
@@ -139,15 +141,12 @@ export default function HomeView() {
                       ➕ Queue
                     </button>
 
-                    {/* Visit Podcast */}
-                    <a
-                      href={p.url}
-                      target="_blank"
-                      rel="noreferrer"
+                    <Link
+                      to={`/podcast/${p.id}`}
                       className="text-[var(--color-highlight)] text-sm hover:underline"
                     >
-                      Visit →
-                    </a>
+                      View Details →
+                    </Link>
                   </div>
                 </div>
               </div>

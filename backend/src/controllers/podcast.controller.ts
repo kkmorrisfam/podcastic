@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import crypto from "crypto";
 import dotenv from "dotenv";
+import { error } from "console";
 
 dotenv.config();
 
@@ -116,3 +117,36 @@ export async function searchByTerm(req: Request, res: Response) {
     res.status(500).json({ error: "Failed to search podcasts" });
   }
 }
+
+/**
+ * GET /api/podcast/detail/:id
+ * Fetches a single podcast's details from Podcast Index API
+ */
+export async function getPodcastDetail(req: Request, res: Response) {
+  try {
+    const id = req.params.id;
+
+    if (!id) {
+      return res.status(400).json({ error: "Missing podcast id parameter" });
+    }
+
+    const response = await fetch(
+      `${API_BASE}/podcasts/byfeedid?id=${encodeURIComponent(id)}`,
+      { headers: getHeaders() }
+    );
+
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(`API responded with ${response.status}: ${text}`);
+    }
+
+    const data = await response.json();
+
+    // PodcastIndex returns an object with a `feed` property for this endpoint
+    return res.json(data);
+  } catch (err) {
+    console.error("[getPodcastDetail] Error:", err);
+    return res.status(500).json({ error: "Failed to load podcast details" });
+  }
+}
+

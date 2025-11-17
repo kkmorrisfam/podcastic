@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom"; 
 
 interface Podcast {
   id: number;
@@ -77,13 +78,12 @@ export default function SearchView() {
                 <p className="text-sm text-[var(--color-text-secondary)] truncate">
                   {p.author}
                 </p>
-                <a
-                  href={p.url}
-                  target="_blank"
+                <Link
+                  to={`/podcast/${p.id}`}
                   className="text-[var(--color-highlight)] text-sm hover:underline"
                 >
-                  Visit Podcast →
-                </a>
+                  View Details →
+                </Link>
               </div>
             </div>
           ))}
