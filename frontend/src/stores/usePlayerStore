@@ -1,0 +1,96 @@
+import { create } from 'zustand';
+// import type { Episode } from '../types';
+import { getQueue, getLibrary } from '../utils/storage';
+import type { Episode, Library, Queue } from '../utils/storage';
+
+interface PlayerStore {
+    //state
+    currentEpisode: Episode | null;
+    isPlaying: boolean;
+    queue: Queue;  // array of episode IDs
+    library: Library; // dictionary of episode objects, library[id] retrieves the full episode object
+    currentIndex: number;
+   
+
+    //actions
+    initializeQueue: (queue: Queue) => void;
+    togglePlay: ()=> void;
+    setCurrentEpisode: (episode: Episode | null) => void;
+    playNext: ()=> void;
+    playPrevious: () => void;
+    back15Sec: () => void;
+    forward15Sec: () => void;
+}
+
+export const usePlayerStore = create<PlayerStore>((set, get) => ({
+    //initial state when creating store      
+    library: getLibrary(),
+    queue: getQueue(),
+    currentEpisode: null,
+    isPlaying: false,     
+    currentIndex: -1,
+
+    
+    initializeQueue: (queue: Queue) => {
+        set({
+            library: getLibrary() || null,
+            queue: getQueue() || null,            
+            currentEpisode: get().currentEpisode || library[queue[0].episodeId],
+        })
+        
+    },
+
+    togglePlay: () => {
+        const willStartPlaying = !get().isPlaying;  //get whatever it's not
+
+        set({
+            isPlaying: willStartPlaying,
+        })
+    },
+
+    setCurrentEpisode: (episode: Episode | null) => {
+        if (!episode) return;
+
+        const episodeIndex = get().queue.findIndex(ep=>ep.episodeId === episode.id)
+    },
+
+    playNext: () => {
+        const {currentIndex, queue} = get();
+        const nextIndex = currentIndex +1;
+
+        //if there is a next episode to play, then play it
+        if(nextIndex < queue.length) {
+            const nextEpisode = library[queue[nextIndex].episodeId];
+            set({
+                currentEpisode: nextEpisode,
+                currentIndex: nextIndex,
+                isPlaying: true,
+            })
+        } else { 
+            // no episode next in the queue
+            set({ isPlaying: false });
+        }
+    },
+
+    playPrevious: () => {
+        const { currentIndex, queue } = get();
+        const previousIndex = currentIndex - 1;
+
+        if(previousIndex >=0 ) {
+            const previousEpisode = library[queue[previousIndex].episodeId];
+            set({
+                currentEpisode: previousEpisode,
+                currentIndex: previousIndex,
+                isPlaying: true,
+            })            
+        } else {
+            set({ isPlaying: false});
+        }
+    },
+
+    back15Sec: () => {},
+
+    forward15Sec: () => {},
+
+
+}));
