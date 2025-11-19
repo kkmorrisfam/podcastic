@@ -1,22 +1,26 @@
-import type { Episode } from "../types"
+import type { Episode } from "../utils/storage"
 
 interface Episodes {
     episodes: Episode[];
 }
 
-type EpisodeViewProps {
-    feedId: number;
-}
 
-export const EpisodeView = ({feedId}: EpisodeViewProps) => {
-    //get store variables 
 
-    //fetch episodes with feedId from backend
-    return (
+export default function EpisodeView({ feedId }: { feedId: number })  {
+  // console.log("Feed ID:", feedId);
+
+  //get store variables 
+    
+
+  //fetch episodes with feedId from backend in useEffect
+
+  //style episide list  - map results
+  //paginate (initially, backend only gets 10 episodes **change later with pagination)
+  return (
     <>
     
       <div>
-
+         Episodes will go here for feed {feedId}
 
       </div>        
     </>

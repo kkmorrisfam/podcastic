@@ -13,16 +13,18 @@ export const STORAGE_KEYS = {
 
 export type StorageKey = typeof STORAGE_KEYS[keyof typeof STORAGE_KEYS];
 
-// ---------- Types ----------
+// ---------- Types ----------  
 export type Episode = {
-  id: string;
+  id: string;  //this comes from api as a number
   title: string;
-  audioUrl: string;
-  podcastId?: string;
-  image?: string;
+  audioUrl: string;  // enclosureUrl
+  podcastId?: string;   // feedId  should be a number
+  image?: string; // episode image - often an empty string ""
   author?: string;
-  durationSec?: number;
-  publishedAt?: string;
+  durationSec?: number;  // duration
+  publishedAt?: string;  //date published - needs to be a number for calculations
+  episode: number;  // episode order number from podcast
+  feedImage: string;  // podcast image
 };
 
 export type Library = Record<string, Episode>;

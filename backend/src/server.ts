@@ -11,17 +11,18 @@ const PORT = process.env.PORT || 5050;
 app.use(cors({ origin: process.env.CORS_ORIGIN }));
 app.use(express.json());
 
-app.use((req, _res, next) => {
-  console.log("REQUEST:", req.method, req.path);
-  next();
-});
+// used for testing
+// app.use((req, _res, next) => {
+//   console.log("REQUEST:", req.method, req.path);
+//   next();
+// });
 
 // Mount routes
 app.use("/api/podcast", podcastRoutes);
 
 // Root
 app.get("/", (_req, res) => {
-  res.send("🎧 Podcastic API is REALLY running!");
+  res.send("🎧 Podcastic API is running!");
 });
 
 

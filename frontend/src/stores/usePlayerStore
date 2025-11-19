@@ -32,12 +32,17 @@ export const usePlayerStore = create<PlayerStore>((set, get) => ({
 
     
     initializeQueue: (queue: Queue) => {
+        // get current library from state, or fallback to storage
+        const library = get().library || getLibrary();
+
         set({
-            library: getLibrary() || null,
-            queue: getQueue() || null,            
-            currentEpisode: get().currentEpisode || library[queue[0].episodeId],
-        })
-        
+            library,
+            queue,            
+            currentEpisode: get().currentEpisode || 
+                (queue.length > 0 ? library[queue[0].episodeId] : null),
+            currentIndex: get().currentIndex === -1 && queue.length > 0
+                ? 0 : get().currentIndex,
+        });        
     },
 
     togglePlay: () => {
@@ -55,8 +60,9 @@ export const usePlayerStore = create<PlayerStore>((set, get) => ({
     },
 
     playNext: () => {
-        const {currentIndex, queue} = get();
-        const nextIndex = currentIndex +1;
+        const {currentIndex, queue, library} = get();
+        const nextIndex = currentIndex + 1;
+      
 
         //if there is a next episode to play, then play it
         if(nextIndex < queue.length) {
@@ -65,7 +71,7 @@ export const usePlayerStore = create<PlayerStore>((set, get) => ({
                 currentEpisode: nextEpisode,
                 currentIndex: nextIndex,
                 isPlaying: true,
-            })
+            });
         } else { 
             // no episode next in the queue
             set({ isPlaying: false });
@@ -73,7 +79,7 @@ export const usePlayerStore = create<PlayerStore>((set, get) => ({
     },
 
     playPrevious: () => {
-        const { currentIndex, queue } = get();
+        const { currentIndex, queue, library } = get();
         const previousIndex = currentIndex - 1;
 
         if(previousIndex >=0 ) {
