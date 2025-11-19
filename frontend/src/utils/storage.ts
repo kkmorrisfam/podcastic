@@ -18,13 +18,13 @@ export type Episode = {
   id: string;  //this comes from api as a number
   title: string;
   audioUrl: string;  // enclosureUrl
-  podcastId?: string;   // feedId  should be a number
+  podcastId?: number;   // feedId  should be a number
   image?: string; // episode image - often an empty string ""
   author?: string;
   durationSec?: number;  // duration
-  publishedAt?: string;  //date published - needs to be a number for calculations
+  publishedAt?: number;  //date published - needs to be a number for calculations
   episode: number;  // episode order number from podcast
-  feedImage: string;  // podcast image
+  feedImage?: string;  // podcast image
 };
 
 export type Library = Record<string, Episode>;
