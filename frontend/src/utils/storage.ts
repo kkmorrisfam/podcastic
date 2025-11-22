@@ -18,11 +18,11 @@ export type Episode = {
   id: string;
   title: string;
   audioUrl: string;
-  podcastId?: string;
+  podcastId?: number;
   image?: string;
   author?: string;
   durationSec?: number;
-  publishedAt?: string;
+  publishedAt?: number;
 };
 
 export type Library = Record<string, Episode>;
