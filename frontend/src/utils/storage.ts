@@ -17,14 +17,12 @@ export type StorageKey = typeof STORAGE_KEYS[keyof typeof STORAGE_KEYS];
 export type Episode = {
   id: string;  //this comes from api as a number
   title: string;
-  audioUrl: string;  // enclosureUrl
-  podcastId?: number;   // feedId  should be a number
-  image?: string; // episode image - often an empty string ""
+  audioUrl: string;
+  podcastId?: number;
+  image?: string;
   author?: string;
-  durationSec?: number;  // duration
-  publishedAt?: number;  //date published - needs to be a number for calculations
-  episode: number;  // episode order number from podcast
-  feedImage?: string;  // podcast image
+  durationSec?: number;
+  publishedAt?: number;
 };
 
 export type Library = Record<string, Episode>;
