@@ -1,6 +1,8 @@
-import type { Episode } from "../utils/storage"
+import type { Episode } from "../utils/storage";
+import {formatEpisodeDate, formatHHMMSS } from "../utils/storage";
 import { useEffect, useState } from "react";
 import PlayButton from "./ui/PlayButton";
+
 
 type ApiEpisode = {
   id: number;
@@ -26,38 +28,6 @@ function mapApiEpisodeToEpisode(api: ApiEpisode): Episode {
       feedImage: api.feedImage,
       episode: api.episode,
     }
-}
-
-//******move to utils when no one is working in there.
-export function formatEpisodeDate(secondsToDate?: number): string {
-   if (!secondsToDate) return "Unknown date";
-
-  // Convert seconds to milliseconds
-  const date = new Date(secondsToDate * 1000);
-
-  const now = new Date();
-  const sameYear = date.getFullYear() === now.getFullYear();
-
-  const options: Intl.DateTimeFormatOptions = sameYear
-    ? { month: "short", day: "numeric" }              // "Nov 18"
-    : { month: "short", day: "numeric", year: "numeric" }; // "Nov 18, 2023"
-
-  return date.toLocaleDateString(undefined, options);
-}
-
-//******move to utils when no one is working in there.
-export function formatHHMMSS(secondsToHours?: number): string {
-  if (!secondsToHours) return "00";
-
-  const dateObject = new Date(secondsToHours * 1000);
-  const hours = dateObject.getUTCHours();
-  const minutes = dateObject.getUTCMinutes();
-  const seconds = dateObject.getSeconds();
-
-  const timeString = hours.toString().padStart(2,'0') + ':' + minutes.toString().padStart(2,'0') + ':' + seconds.toString().padStart(2, '0');
-
-  return timeString;
-
 }
 
 
