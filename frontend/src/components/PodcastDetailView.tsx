@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import EpisodeView from "./EpisodeView";
 
 interface PodcastDetail {
   id: number;
@@ -65,6 +66,7 @@ export default function PodcastDetailView() {
   }, [id]);
 
   return (
+    <>
     <section className="w-full px-4 py-10 bg-bg)]">
       {loading && (
         <p className="text-center text-text-secondary)] animate-pulse">
@@ -123,5 +125,11 @@ export default function PodcastDetailView() {
         </div>
       )}
     </section>
+      {podcast && (
+        <section>
+          <EpisodeView feedId={podcast.id} />
+        </section>
+      )}
+    </>
   );
 }
