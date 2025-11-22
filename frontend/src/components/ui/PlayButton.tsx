@@ -6,6 +6,7 @@ import { FaPause, FaPlay  } from "react-icons/fa6";
 const PlayButton = ( {episode}: {episode:Episode | null}  ) => {
   const {currentEpisode, isPlaying, setCurrentEpisode, togglePlay} = usePlayerStore();
   
+  // handle initial render when episode is null
    if (!episode) {
     return (
       <button className="player-button" disabled>
