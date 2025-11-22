@@ -3,9 +3,17 @@ import type { Episode } from "../../utils/storage.ts";
 import { FaPause, FaPlay  } from "react-icons/fa6";
 
 // keep track of state: isPlaying, 
-const PlayButton = ( {episode}: {episode:Episode}  ) => {
+const PlayButton = ( {episode}: {episode:Episode | null}  ) => {
   const {currentEpisode, isPlaying, setCurrentEpisode, togglePlay} = usePlayerStore();
   
+   if (!episode) {
+    return (
+      <button className="player-button" disabled>
+        <FaPlay className="size-5 text-text-primary" />
+      </button>
+    );
+  }
+
   //set passed in episode as isCurrentEpisode
   const isCurrentEpisode = currentEpisode?.id === episode.id;
   
@@ -21,10 +29,10 @@ const PlayButton = ( {episode}: {episode:Episode}  ) => {
       className="player-button"
     >
       {isCurrentEpisode && isPlaying ? (
-        <FaPause className="size-5 text-black" />
+        <FaPause className="size-5 text-text-primary" />
         
       ) : (
-        <FaPlay className="size-5 text-black"/>
+        <FaPlay className="size-5 text-text-primary"/>
       )}
 
       

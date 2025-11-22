@@ -1,11 +1,19 @@
 import { RiForward15Line, RiReplay15Line  } from "react-icons/ri";
 import { FaPlay, FaPause  } from "react-icons/fa6";
+import PlayButton from "./ui/PlayButton";
+import { usePlayerStore } from "../stores/usePlayerStore";
+import { useEffect } from "react";
 
 const Player = () => {
-// need to update state for isPlaying, currentEpisode, queue[]
-const testAudioUrl = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
+  // need to update state for isPlaying, currentEpisode, queue[]
+  const testAudioUrl = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
 
-//get audio element?
+  const {currentEpisode} = usePlayerStore();
+
+  useEffect(()=>{
+    
+  },[currentEpisode])
+
 
   return (
     <div className="flex justify-center items-center">
@@ -19,8 +27,8 @@ const testAudioUrl = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.
       </div>
       <div>
         {/* Play Button/Icon control  If isPlaying=true then show pause button, if isPlaying=false then show play button*/}
-        <FaPlay />
-        <FaPause />
+        
+        <PlayButton episode={currentEpisode} />
       </div>
       <div>
         {/* Forward 15sec control*/}

@@ -23,6 +23,8 @@ export type Episode = {
   author?: string;
   durationSec?: number;
   publishedAt?: number;
+  episode: number;
+  feedImage?: string;
 };
 
 export type Library = Record<string, Episode>;

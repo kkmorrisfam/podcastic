@@ -66,6 +66,7 @@ export default function PodcastDetailView() {
   }, [id]);
 
   return (
+    <>
     <section className="w-full px-4 py-10 bg-bg)]">
       {loading && (
         <p className="text-center text-text-secondary)] animate-pulse">
