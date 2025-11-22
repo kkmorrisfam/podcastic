@@ -5,8 +5,11 @@ interface PodcastDetail {
   id: number;
   title: string;
   author: string;
+  podcastId: number;
   image: string;
   description: string;
+  durationSec?: number;
+  publishedAt: number;
   link?: string; // website link
 }
 
@@ -40,11 +43,13 @@ export default function PodcastDetailView() {
 
         const mapped: PodcastDetail = {
           id: feed.id,
+          podcastId: feed.id,
           title: feed.title,
           author: feed.author || feed.ownerName || "Unknown",
           image: feed.image || feed.artwork || "",
           description: feed.description || feed.summary || "No description available.",
           link: feed.link,
+          publishedAt: feed.lastUpdateTime || 0, 
         };
 
         setPodcast(mapped);
@@ -60,9 +65,9 @@ export default function PodcastDetailView() {
   }, [id]);
 
   return (
-    <section className="w-full px-4 py-10 bg-[var(--color-bg)]">
+    <section className="w-full px-4 py-10 bg-bg)]">
       {loading && (
-        <p className="text-center text-[var(--color-text-secondary)] animate-pulse">
+        <p className="text-center text-text-secondary)] animate-pulse">
           Loading podcast…
         </p>
       )}
@@ -73,7 +78,7 @@ export default function PodcastDetailView() {
 
       {!loading && !error && podcast && (
         <div className="max-w-4xl mx-auto flex flex-col md:flex-row gap-8">
-          <div className="flex-shrink-0">
+          <div className="shrink-0">
             {podcast.image ? (
               <img
                 src={podcast.image}
@@ -81,17 +86,17 @@ export default function PodcastDetailView() {
                 className="w-64 h-64 object-cover rounded-xl shadow-lg"
               />
             ) : (
-              <div className="w-64 h-64 rounded-xl bg-[var(--color-surface)] flex items-center justify-center text-[var(--color-text-secondary)]">
+              <div className="w-64 h-64 rounded-xl bg-surface)] flex items-center justify-center text-text-secondary)]">
                 No Artwork
               </div>
             )}
           </div>
 
           <div className="flex-1">
-            <h1 className="text-3xl font-bold mb-2 text-[var(--color-text-primary)]">
+            <h1 className="text-3xl font-bold mb-2 text-text-primary)]">
               {podcast.title}
             </h1>
-            <p className="text-lg text-[var(--color-text-secondary)] mb-4">
+            <p className="text-lg text-text-secondary)] mb-4">
               by <span className="font-medium">{podcast.author}</span>
             </p>
 
@@ -101,17 +106,17 @@ export default function PodcastDetailView() {
                   href={podcast.link}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-[var(--color-highlight)] hover:underline"
+                  className="text-highlight)] hover:underline"
                 >
                   Visit Website →
                 </a>
               </p>
             )}
 
-            <h2 className="text-xl font-semibold mb-2 text-[var(--color-text-primary)]">
+            <h2 className="text-xl font-semibold mb-2 text-text-primary)]">
               Description
             </h2>
-            <p className="text-[var(--color-text-secondary)] leading-relaxed whitespace-pre-wrap">
+            <p className="text-text-secondary)] leading-relaxed whitespace-pre-wrap">
               {podcast.description}
             </p>
           </div>

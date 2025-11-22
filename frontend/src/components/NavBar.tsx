@@ -36,10 +36,10 @@ export default function NavBar() {
           className="
             hidden sm:block
             px-3 py-1.5 text-sm rounded-l-md border 
-            border-[var(--color-border)] 
-            bg-[var(--color-surface)] 
-            text-[var(--color-text-primary)]
-            focus:outline-none focus:ring-2 focus:ring-[var(--color-highlight)]
+            border-border)] 
+            bg-surface)] 
+            text-text-primary)]
+            focus:outline-none focus:ring-2 focus:ring-highlight)]
             transition
           "
         />
@@ -48,8 +48,8 @@ export default function NavBar() {
           type="submit"
           className="
             hidden sm:block
-            px-3 py-1.5 bg-[var(--color-highlight)] 
-            text-[var(--color-bg)] text-sm rounded-r-md 
+            px-3 py-1.5 bg-highlight)] 
+            text-bg)] text-sm rounded-r-md 
             hover:opacity-90 transition
           "
         >
