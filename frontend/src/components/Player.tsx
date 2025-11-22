@@ -5,6 +5,7 @@ const Player = () => {
 // need to update state for isPlaying, currentEpisode, queue[]
 const testAudioUrl = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
 
+//get audio element?
 
   return (
     <div className="flex justify-center items-center">
