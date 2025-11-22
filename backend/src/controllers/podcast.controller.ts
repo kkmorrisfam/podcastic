@@ -150,3 +150,75 @@ export async function getPodcastDetail(req: Request, res: Response) {
   }
 }
 
+
+/**
+ * GET /api/podcast/episodes/byfeedid/:feedid
+ * Postman: {{apiBase}}/episodes/byfeedid?id=3957526&max=10
+ * Fetches a single podcast's array of episodes from Podcast Index API
+ */
+
+export async function getEpisodes(req: Request, res: Response) {
+  try {
+    const feedid = req.params.feedid;
+
+    console.log("req.params.feedid " + feedid);
+    if (!feedid) {
+      return res.status(400).json({ error: "Missing podcast id parameter" });
+    }
+
+    const response = await fetch(
+      `${API_BASE}/episodes/byfeedid?id=${encodeURIComponent(feedid)}&max=10`,
+      { headers: getHeaders() }
+    );
+
+    console.log("api response: " + response);
+
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(`API responded with ${response.status}: ${text}`);
+    }
+
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    console.error("[searchByTerm] Error:", err);
+    res.status(500).json({ error: "Failed to search podcasts" });
+  }
+} 
+
+
+/**
+ * GET /api/podcast/episodes/byid/:id 
+ * Postman: {{apiBase}}/episodes/byid?id=43274934662
+ * Fetches a single podcast's episode from Podcast Index API
+ */
+export async function getEpisodeById(req: Request, res: Response) {
+  try {
+    const id = req.params.id;
+
+    console.log("req.params.id " + id);
+
+    if (!id) {
+      return res.status(400).json({ error: "Missing podcast id parameter" });
+    }
+
+    const response = await fetch(
+      `${API_BASE}/episodes/byid?id=${encodeURIComponent(id)}`,
+      { headers: getHeaders() }
+    );
+    console.log("api response: " + response);
+
+    if (!response.ok) {
+      const text = await response.text();
+      throw new Error(`API responded with ${response.status}: ${text}`);
+    }
+
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    console.error("[searchByTerm] Error:", err);
+    res.status(500).json({ error: "Failed to search podcasts" });
+  }
+
+}
+
