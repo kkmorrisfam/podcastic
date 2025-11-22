@@ -5,6 +5,7 @@ import {
   toggleFavorite,
   isFavorite,
 } from "../utils/storage";
+import { api } from "../utils/api"
 
 import { Link } from "react-router-dom";
 
@@ -33,9 +34,10 @@ export default function HomeView() {
     try {
       setLoading(true);
       setError(null);
-      const res = await fetch("http://localhost:5050/api/podcast/trending");
+      const API = import.meta.env.VITE_API_URL;
+      const res = await fetch(`${API}/api/podcast/trending`);
       if (!res.ok) throw new Error("Failed to fetch podcasts");
-      const data = await res.json();
+      const data = await api.fetchTrending();
       const feeds = data.feeds || [];
 
       // Convert & store in LocalStorage library

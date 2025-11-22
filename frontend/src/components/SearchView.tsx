@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Link } from "react-router-dom"; 
+import { api } from "../utils/api";
 
 interface Podcast {
   id: number;
@@ -28,12 +29,14 @@ export default function SearchView() {
       setLoading(true);
       setError(null);
 
-      const res = await fetch(
-        `http://localhost:5050/api/podcast/search?term=${encodeURIComponent(query)}`
-      );
+     const API = import.meta.env.VITE_API_URL;
+
+     const res = await fetch(
+      `${API}/api/podcast/search?term=${encodeURIComponent(query)}`
+     );
       if (!res.ok) throw new Error("Search failed");
 
-      const data = await res.json();
+      const data = await api.search(query);
       setResults(data.feeds || []);
     } catch (err) {
       console.error(err);
@@ -46,7 +49,7 @@ export default function SearchView() {
   return (
     <section className="w-full px-4 py-10 bg-[var(--color-bg)]">
       <h1 className="text-2xl font-bold text-center mb-8 text-[var(--color-text-primary)]">
-        🔍 Search Results for: <span className="text-[var(--color-highlight)]">{term}</span>
+        Search Results for: <span className="text-[var(--color-highlight)]">{term}</span>
       </h1>
 
       {loading && (
