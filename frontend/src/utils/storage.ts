@@ -13,16 +13,18 @@ export const STORAGE_KEYS = {
 
 export type StorageKey = typeof STORAGE_KEYS[keyof typeof STORAGE_KEYS];
 
-// ---------- Types ----------
+// ---------- Types ----------  
 export type Episode = {
-  id: string;
+  id: string;  //this comes from api as a number
   title: string;
   audioUrl: string;
-  podcastId?: string;
+  podcastId?: number;
   image?: string;
   author?: string;
   durationSec?: number;
-  publishedAt?: string;
+  publishedAt?: number;
+  episode: number;
+  feedImage?: string;
 };
 
 export type Library = Record<string, Episode>;
@@ -187,4 +189,41 @@ export function bindStorageSync(onChange: (key: StorageKey) => void): () => void
 export function clearAllStorage(): void {
   Object.values(STORAGE_KEYS).forEach((key) => localStorage.removeItem(key));
   console.log("🧹 Cleared all podcastic LocalStorage data.");
+}
+
+// ==========================================================
+// format date into "MMM DD YYYY" format, and leave off year if year == current
+// ==========================================================
+export function formatEpisodeDate(secondsToDate?: number): string {
+   if (!secondsToDate) return "Unknown date";
+
+  // Convert seconds to milliseconds
+  const date = new Date(secondsToDate * 1000);
+
+  const now = new Date();
+  const sameYear = date.getFullYear() === now.getFullYear();
+
+  const options: Intl.DateTimeFormatOptions = sameYear
+    ? { month: "short", day: "numeric" }              // "Nov 18"
+    : { month: "short", day: "numeric", year: "numeric" }; // "Nov 18, 2023"
+
+  return date.toLocaleDateString(undefined, options);
+}
+
+// ==========================================================
+// format duration into HH:MM:SS format
+// ==========================================================
+
+export function formatHHMMSS(secondsToHours?: number): string {
+  if (!secondsToHours) return "00";
+
+  const dateObject = new Date(secondsToHours * 1000);
+  const hours = dateObject.getUTCHours();
+  const minutes = dateObject.getUTCMinutes();
+  const seconds = dateObject.getSeconds();
+
+  const timeString = hours.toString().padStart(2,'0') + ':' + minutes.toString().padStart(2,'0') + ':' + seconds.toString().padStart(2, '0');
+
+  return timeString;
+
 }

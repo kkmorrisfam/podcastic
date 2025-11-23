@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   upsertMany,
   addToQueue,
@@ -44,10 +44,13 @@ export default function HomeView() {
       upsertMany(
         feeds.map((f: Podcast) => ({
           id: String(f.id),
+          podcastId: f.id,
           title: f.title,
           image: f.image,
           audioUrl: f.url, // not always an audio file, but kept for structure
           author: f.author,
+          publishedAt: undefined,
+          durationSec: undefined,
         }))
       );
 
@@ -82,13 +85,13 @@ export default function HomeView() {
   };
 
   return (
-    <section className="w-full px-4 py-10 bg-[var(--color-bg)]">
-      <h2 className="text-2xl font-bold mb-8 text-center text-[var(--color-text-primary)]">
+    <section className="w-full px-4 py-10 bg-bg)]">
+      <h2 className="text-2xl font-bold mb-8 text-center text-text-primary)]">
         Trending Podcasts
       </h2>
 
       {loading && (
-        <p className="text-center text-lg text-[var(--color-text-secondary)] animate-pulse">
+        <p className="text-center text-lg text-text-secondary)] animate-pulse">
           Loading podcasts...
         </p>
       )}
@@ -105,7 +108,7 @@ export default function HomeView() {
             return (
               <div
                 key={p.id}
-                className="podcast-card rounded-xl overflow-hidden shadow-lg bg-[var(--color-surface)] hover:shadow-xl transition duration-300"
+                className="podcast-card rounded-xl overflow-hidden shadow-lg bg-surface)] hover:shadow-xl transition duration-300"
               >
                 <img
                   src={p.image}
@@ -114,10 +117,10 @@ export default function HomeView() {
                 />
                 <div className="p-4 flex flex-col justify-between min-h-[150px]">
                   <div>
-                    <h3 className="font-semibold text-lg mb-1 truncate text-[var(--color-text-primary)]">
+                    <h3 className="font-semibold text-lg mb-1 truncate text-text-primary)]">
                       {p.title}
                     </h3>
-                    <p className="text-sm text-[var(--color-text-secondary)] mb-3 truncate">
+                    <p className="text-sm text-text-secondary)] mb-3 truncate">
                       {p.author}
                     </p>
                   </div>
@@ -127,7 +130,7 @@ export default function HomeView() {
                     <button
                       onClick={() => handleToggleFavorite(p.id)}
                       className={`text-xl ${
-                        fav ? "text-pink-400" : "text-[var(--color-text-secondary)]"
+                        fav ? "text-pink-400" : "text-text-secondary)]"
                       } hover:scale-110 transition`}
                       title={fav ? "Remove Favorite" : "Add Favorite"}
                     >
@@ -137,7 +140,7 @@ export default function HomeView() {
                     {/* Add to Queue Button */}
                     <button
                       onClick={() => handleAddToQueue(p.id)}
-                      className="px-3 py-1 bg-[var(--color-highlight)] text-[var(--color-bg)] rounded-md text-sm font-medium hover:opacity-90 transition"
+                      className="px-3 py-1 bg-highlight)] text-color-bg)] rounded-md text-sm font-medium hover:opacity-90 transition"
                       title="Add to Queue"
                     >
                       ➕ Queue
@@ -145,7 +148,7 @@ export default function HomeView() {
 
                     <Link
                       to={`/podcast/${p.id}`}
-                      className="text-[var(--color-highlight)] text-sm hover:underline"
+                      className="text-highlight)] text-sm hover:underline"
                     >
                       View Details →
                     </Link>
