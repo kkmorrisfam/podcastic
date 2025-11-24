@@ -114,7 +114,11 @@ export default function EpisodeView({ feedId }: { feedId: number })  {
                     alt={episode.title}
                     className="w-full h-20 object-cover" 
                   /></div>
+
+                {episode.episode ? (
                 <div className="hidden sm:block text-sm text-text-secondary"># {episode.episode}</div>
+                ) : (<div></div>)
+                 }
                 <div className=" min-w-0 sm:col-span-1">
                     <p className="truncate font-medium"> {episode.title} 
                     </p>

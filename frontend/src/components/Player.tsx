@@ -1,5 +1,5 @@
-import { RiForward15Line, RiReplay15Line, RiSkipBackLine  } from "react-icons/ri"
-import { FaStepForward,  FaStepBackward } from "react-icons/fa";
+import { RiForward15Line, RiReplay15Line, RiSkipBackLine, RiSkipForwardLine } from "react-icons/ri"
+
 
 import PlayButton from "./ui/PlayButton";
 import { usePlayerStore } from "../stores/usePlayerStore";
@@ -9,7 +9,7 @@ import { formatEpisodeDate } from "../utils/storage";
 
 const Player = () => {
   // need to update state for isPlaying, currentEpisode, queue[]
-  const {currentEpisode, isPlaying} = usePlayerStore();
+  const {currentEpisode, isPlaying, playPrevious, playNext} = usePlayerStore();
 
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -60,6 +60,17 @@ const Player = () => {
     }
   },[currentEpisode])
 
+  const handleFwd15Sec = () => {
+    if (audioRef.current) {
+      audioRef.current.currentTime +=15;
+    }
+  }
+
+  const handleBack15Sec = () => {
+    if (audioRef.current) {
+      audioRef.current.currentTime -=15;
+    }
+  }
 
   return (
     <>
@@ -95,25 +106,29 @@ const Player = () => {
 
           {/* Back, Forward, Play, Pause */}
           <div className="flex items-center gap-4">          
-            <div >
-              {/* <FaStepBackward className="play-icon"/> */}
-              <RiSkipBackLine className="play-icon size-8"/>
-            </div>
-            <div className="play-icon">
+            <button onClick={playPrevious}  className="play-icon" >
+              <RiSkipBackLine />
+            </button>
+            
               {/* Back 15sec control*/}
+            <button onClick={handleBack15Sec}  className="play-icon">            
               <RiReplay15Line className="play-icon"/>
-            </div>
-            <div>
+            </button>
+
               {/* Play Button/Icon control  If isPlaying=true then show pause button, if isPlaying=false then show play button*/}        
+            <div>              
               <PlayButton episode={currentEpisode}  />
             </div>
-            <div >
-              {/* Forward 15sec control*/}
-              <RiForward15Line className="play-icon"/>
-            </div>
-            <div >
-              <FaStepForward className="play-icon"/>
-            </div>
+
+            {/* Forward 15sec control*/}            
+            <button onClick={handleFwd15Sec} className="play-icon">
+              <RiForward15Line />
+            </button>
+            
+            <button onClick={playNext}  className="play-icon">
+              <RiSkipForwardLine />
+            </button>
+            
           </div>
           
           {/* player duration bar */}

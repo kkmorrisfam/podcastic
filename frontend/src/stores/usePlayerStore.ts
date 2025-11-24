@@ -16,9 +16,7 @@ interface PlayerStore {
     togglePlay: ()=> void;
     setCurrentEpisode: (episode: Episode | null) => void;
     playNext: ()=> void;
-    playPrevious: () => void;
-    back15Sec: () => void;
-    forward15Sec: () => void;
+    playPrevious: () => void;    
     playEpisode: (episodes: Episode[], startIndex: number) => void;
 }
 
@@ -104,9 +102,7 @@ export const usePlayerStore = create<PlayerStore>((set, get) => ({
         }
     },
 
-    back15Sec: () => {},
-
-    forward15Sec: () => {},
+    
 
 
     playEpisode: (episodes: Episode[], startIndex=0) => {
