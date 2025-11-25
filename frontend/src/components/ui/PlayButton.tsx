@@ -1,6 +1,6 @@
 import { usePlayerStore } from "../../stores/usePlayerStore.ts";
 import type { Episode } from "../../utils/storage.ts";
-import { FaPause, FaPlay  } from "react-icons/fa6";
+import { FaPause, FaPlay, FaRegCirclePlay   } from "react-icons/fa6";
 
 // keep track of state: isPlaying, 
 const PlayButton = ( {episode}: {episode:Episode | null}  ) => {
@@ -10,7 +10,7 @@ const PlayButton = ( {episode}: {episode:Episode | null}  ) => {
    if (!episode) {
     return (
       <button className="player-button" disabled>
-        <FaPlay className="size-5 text-text-primary" />
+        <FaPlay className="size-5 text-text-primary hover:bg-highlight" />
       </button>
     );
   }
@@ -30,10 +30,10 @@ const PlayButton = ( {episode}: {episode:Episode | null}  ) => {
       className="player-button"
     >
       {isCurrentEpisode && isPlaying ? (
-        <FaPause className="size-5 text-text-primary" />
+        <FaPause className="size-5 play-icon" />
         
       ) : (
-        <FaPlay className="size-5 text-text-primary"/>
+        <FaRegCirclePlay  className="size-5 play-icon"/>
       )}
 
       

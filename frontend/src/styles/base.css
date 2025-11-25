@@ -58,12 +58,25 @@
   .player-button {
     /* background-color: var(--color-accent); */
     color: var(--color-text-primary);
-    border: none; width: 45px; height: 45px; border-radius: 50%;
+    border: none; 
+    /* width: 45px;  */
+    height: 45px; border-radius: 50%;
     font-size: 1.1rem; cursor: pointer;
   }
   .player-button:hover { 
     /* background-color: var(--color-highlight);  */
     size: 1.5rem;
+  }
+
+  .play-icon {
+    color: var(--color-text-primary);
+    border-radius: 9999px;
+    font-size: 1.7rem;
+  }
+
+  .play-icon:hover {
+    background-color: var(--color-highlight);
+    border-radius: 9999px;
   }
 
   .container {
