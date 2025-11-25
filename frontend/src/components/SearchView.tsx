@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { Link } from "react-router-dom"; 
 
 import { upsertMany } from "../utils/storage";
+import { isFavorite, toggleFavorite } from "../utils/storage";
 
 interface Podcast {
   id: number;
@@ -58,6 +59,11 @@ export default function SearchView() {
     }
   };
 
+    const handleToggleFavorite = (id: number) => {
+      toggleFavorite(String(id));        // Save to LocalStorage
+      setResults((prev) => [...prev]);   // force UI refresh
+  };
+
   return (
     <section className="w-full px-4 py-10 bg-bg)]">
       <h1 className="text-2xl font-bold text-center mb-8 text-text-primary)]">
@@ -93,9 +99,27 @@ export default function SearchView() {
                 <p className="text-sm text-text-secondary)] truncate">
                   {p.author}
                 </p>
+                {/* ⭐ Favorite Toggle */}
+                <button
+                  onClick={() => handleToggleFavorite(p.id)}
+                  className={`text-xl mr-4 ${
+                    isFavorite(String(p.id))
+                      ? "text-pink-400"
+                      : "text-[var(--color-text-secondary)]"
+                  } hover:scale-110 transition`}
+                  title={
+                    isFavorite(String(p.id))
+                      ? "Remove Favorite"
+                      : "Add to Favorites"
+                  }
+                >
+                  {isFavorite(String(p.id)) ? "★" : "☆"}
+                </button>
+
+                {/* Details Link */}
                 <Link
                   to={`/podcast/${p.id}`}
-                  className="text-highlight)] text-sm hover:underline"
+                  className="text-[var(--color-highlight)] text-sm hover:underline"
                 >
                   View Details →
                 </Link>

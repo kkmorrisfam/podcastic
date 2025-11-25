@@ -2,6 +2,7 @@ import type { Episode } from "../utils/storage";
 import {formatEpisodeDate, formatHHMMSS } from "../utils/storage";
 import { useEffect, useState } from "react";
 import PlayButton from "./ui/PlayButton";
+import { isFavorite, toggleFavorite } from "../utils/storage";
 
 
 type ApiEpisode = {
@@ -125,13 +126,40 @@ export default function EpisodeView({ feedId }: { feedId: number })  {
                   </div>
                 <div className="hidden sm:blocktext-sm text-text-secondary"> {formatEpisodeDate(episode.publishedAt)} </div>
                 <div className="hidden sm:block text-sm text-text-secondary"> {formatHHMMSS(episode.durationSec) ?? "00"} </div>
-                <div className="justify-self-end"><PlayButton episode={episode}/> </div>          
-            </div>);
+               {/* ⭐ FAVORITE BUTTON */}
+                <div>
+                  <button
+                    onClick={() => {
+                      toggleFavorite(episode.id.toString());
+                      // force React to update UI by cloning episodes array
+                      setEpisodes((prev) => [...prev]);
+                    }}
+                    className={`text-xl transition hover:scale-110 ${
+                      isFavorite(episode.id.toString())
+                        ? "text-pink-400"
+                        : "text-[var(--color-text-secondary)]"
+                    }`}
+                    title={
+                      isFavorite(episode.id.toString())
+                        ? "Remove from Favorites"
+                        : "Add to Favorites"
+                    }
+                  >
+                    {isFavorite(episode.id.toString()) ? "★" : "☆"}
+                  </button>
+                </div>
 
-          })}
-        </div>
-        )}        
+                {/* Play Button */}
+                  <div>
+                    <PlayButton episode={episode} />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+                
       </div>
     </>
-  )
+  );
 }
