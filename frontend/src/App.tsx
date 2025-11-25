@@ -4,6 +4,7 @@ import SearchView from "./components/SearchView";
 import MainLayout from "./components/layout/MainLayout";
 import Trending from "./components/Trending";
 import PodcastDetailView from "./components/PodcastDetailView";
+import FavoritesView from "./components/FavoritesView";
 
 export default function App() {
     return(
@@ -17,7 +18,7 @@ export default function App() {
                       <Route path="/trending" element={<Trending/>} />
                       {/* ********Any route to a page that shares the MainLayout ******* */}
                       <Route path="/search" element={<SearchView />} />
-                      {/* <Route path="/favorites" element={<Favorites />} /> */}
+                      <Route path="/favorites" element={<FavoritesView />} />
                       <Route path="/podcast/:id" element={<PodcastDetailView />} />
                     </Route>
                   </Routes>
