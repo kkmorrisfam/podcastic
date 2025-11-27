@@ -5,8 +5,17 @@ import MainLayout from "./components/layout/MainLayout";
 import Trending from "./components/Trending";
 import PodcastDetailView from "./components/PodcastDetailView";
 import FavoritesView from "./components/FavoritesView";
+import { useEffect } from "react";
+import { hydratePlayerFromLocalStorage } from "./utils/playerPersistence";
 
 export default function App() {
+
+    // get data from local storage and sync to state
+    useEffect(() => {
+      hydratePlayerFromLocalStorage();
+    }, []);
+
+
     return(
         <>
             {/* <div className="min-h-screen flex flex-col" > */}
