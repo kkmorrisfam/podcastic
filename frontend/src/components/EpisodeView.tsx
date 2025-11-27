@@ -1,8 +1,15 @@
 import type { Episode } from "../utils/storage";
-import {formatEpisodeDate, formatHHMMSS } from "../utils/storage";
+import {
+  formatEpisodeDate,
+  formatHHMMSS,
+  isFavorite,
+  toggleFavorite,
+  addToQueue,
+} from "../utils/storage";
+
 import { useEffect, useState } from "react";
 import PlayButton from "./ui/PlayButton";
-import { isFavorite, toggleFavorite } from "../utils/storage";
+import { MdOutlineAddToQueue } from "react-icons/md";
 
 
 type ApiEpisode = {
@@ -15,123 +22,116 @@ type ApiEpisode = {
   duration: number;
   enclosureUrl: string;
   feedId: number;
-}
+};
 
 function mapApiEpisodeToEpisode(api: ApiEpisode): Episode {
-    
-    return {
-      id: api.id.toString(),
-      title: api.title,
-      image: api.image ?? api.feedImage ?? "",
-      publishedAt: api.datePublished,
-      durationSec: api.duration,
-      audioUrl: api.enclosureUrl,
-      feedImage: api.feedImage,
-      episode: api.episode,
-    }
+  return {
+    id: api.id.toString(),
+    title: api.title,
+    image: api.image ?? api.feedImage ?? "",
+    publishedAt: api.datePublished,
+    durationSec: api.duration,
+    audioUrl: api.enclosureUrl,
+    feedImage: api.feedImage,
+    episode: api.episode,
+  };
 }
 
-
-export default function EpisodeView({ feedId }: { feedId: number })  {
-  // console.log("Feed ID:", feedId);
-
-  //get store variables 
-
- 
-  // set state
+export default function EpisodeView({ feedId }: { feedId: number }) {
   const [episodes, setEpisodes] = useState<Episode[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
 
-  //fetch episodes with feedId from backend in useEffect
   useEffect(() => {
-      if (!feedId) return;
-  
-      const fetchDetail = async () => {
-        try {
-          setLoading(true);
-          setError(null);
-  
-          const res = await fetch(
-            `http://localhost:5050/api/podcast/episodes/byfeedid/${feedId}`
-          );
-  
-          if (!res.ok) {
-            throw new Error("Failed to fetch episode details");
-          }
-  
-          const data = await res.json();
-  
-          // PodcastIndex /episodes/byfeedid returns { "items": [{ ... },... ]}
-          const apiEpisodes: ApiEpisode[] = data.items;
+    if (!feedId) return;
 
-          // get api episode fields to match up with Episode type
-          const mappedEpisodes: Episode[] = apiEpisodes.map(mapApiEpisodeToEpisode);
+    const fetchDetail = async () => {
+      try {
+        setLoading(true);
+        setError(null);
 
-          //set State
-          setEpisodes(mappedEpisodes);
-        } catch (err) {
-          console.error(err);
-          setError("Unable to load episode details. Please try again later.");
-        } finally {
-          setLoading(false);
+        const res = await fetch(
+          `http://localhost:5050/api/podcast/episodes/byfeedid/${feedId}`
+        );
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch episode details");
         }
-      };
-  
-      fetchDetail();
-    }, [feedId]);
-  
 
+        const data = await res.json();
+        const apiEpisodes: ApiEpisode[] = data.items;
 
-  //style episide list  - map results
-  //paginate (initially, backend only gets 10 episodes **change later with pagination)
+        const mappedEpisodes: Episode[] =
+          apiEpisodes.map(mapApiEpisodeToEpisode);
+
+        setEpisodes(mappedEpisodes);
+      } catch (err) {
+        console.error(err);
+        setError("Unable to load episode details. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDetail();
+  }, [feedId]);
+
   return (
     <>
       <div>
-        <div>Latest Episodes </div>
+        <div className="mb-4 text-xl font-semibold">Latest Episodes</div>
 
         {loading && (
-            <p className="text-center text-lg text-text-secondary animate-pulse">
-              Loading podcasts...
-            </p>
+          <p className="text-center text-lg text-text-secondary animate-pulse">
+            Loading podcasts...
+          </p>
         )}
 
-        {error && (
-            <p className="text-center text-accent mt-4">{error}</p>
-        )}
-        
+        {error && <p className="text-center text-accent mt-4">{error}</p>}
+
         {!loading && !error && (
-        <div className="">
-          {episodes.map((episode) => {
-
-            return (
-              <div key={episode.id} className="grid items-center gap-4 py-3 border-b border-slate-200
-                    grid-cols-[minmax(0,1fr)_auto]
-                    sm:grid-cols-[80px_60px_minmax(0,1fr)_110px_90px_90px] ">
-                <div className="hidden sm:block h-20 w-20 overflow-hidden rounded-md"> 
-                   <img
-                    src={episode.image || episode.feedImage }
+          <div>
+            {episodes.map((episode) => (
+              <div
+                key={episode.id}
+                className="grid items-center gap-4 py-3 border-b border-slate-200
+                  grid-cols-[minmax(0,1fr)_auto]
+                  sm:grid-cols-[80px_60px_minmax(0,1fr)_250px]"
+              >
+                {/* Thumbnail */}
+                <div className="hidden sm:block h-20 w-20 overflow-hidden rounded-md">
+                  <img
+                    src={episode.image || episode.feedImage}
                     alt={episode.title}
-                    className="w-full h-20 object-cover" 
-                  /></div>
+                    className="w-full h-20 object-cover"
+                  />
+                </div>
 
+                {/* Episode number */}
                 {episode.episode ? (
-                <div className="hidden sm:block text-sm text-text-secondary"># {episode.episode}</div>
-                ) : (<div></div>)
-                 }
-                <div className=" min-w-0 sm:col-span-1">
-                    <p className="truncate font-medium"> {episode.title} 
-                    </p>
+                  <div className="hidden sm:block text-sm text-text-secondary">
+                    # {episode.episode}
                   </div>
-                <div className="hidden sm:blocktext-sm text-text-secondary"> {formatEpisodeDate(episode.publishedAt)} </div>
-                <div className="hidden sm:block text-sm text-text-secondary"> {formatHHMMSS(episode.durationSec) ?? "00"} </div>
-               {/* ⭐ FAVORITE BUTTON */}
-                <div>
+                ) : (
+                  <div></div>
+                )}
+
+                {/* Title */}
+                <div className="min-w-0 sm:col-span-1">
+                  <p className="truncate font-medium">{episode.title}</p>
+                </div>
+
+                {/* ⭐ Duration + Favorite + Queue + Play (ALL INLINE) */}
+                <div className="flex items-center justify-start gap-6">
+                  {/* Duration */}
+                  <span className="text-sm text-text-secondary">
+                    {formatHHMMSS(episode.durationSec) ?? "00"}
+                  </span>
+
+                  {/* Favorite Button */}
                   <button
                     onClick={() => {
                       toggleFavorite(episode.id.toString());
-                      // force React to update UI by cloning episodes array
                       setEpisodes((prev) => [...prev]);
                     }}
                     className={`text-xl transition hover:scale-110 ${
@@ -147,18 +147,23 @@ export default function EpisodeView({ feedId }: { feedId: number })  {
                   >
                     {isFavorite(episode.id.toString()) ? "★" : "☆"}
                   </button>
-                </div>
 
-                {/* Play Button */}
-                  <div>
-                    <PlayButton episode={episode} />
-                  </div>
+                  {/* Queue Button */}
+                  <button
+                    onClick={() => addToQueue(episode.id.toString())}
+                    className="text-2xl hover:scale-110 transition text-[var(--color-text-secondary)]"
+                    title="Add to Queue"
+                  >
+                    <MdOutlineAddToQueue />
+                  </button>
+
+                  {/* Play Button */}
+                  <PlayButton episode={episode} />
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
         )}
-                
       </div>
     </>
   );

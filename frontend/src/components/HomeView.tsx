@@ -7,6 +7,8 @@ import {
 } from "../utils/storage";
 
 import { Link } from "react-router-dom";
+import { MdOutlineAddToQueue } from "react-icons/md";
+
 
 // Interface for podcast data from backend
 interface Podcast {
@@ -138,10 +140,10 @@ export default function HomeView() {
                     {/* Add to Queue Button */}
                     <button
                       onClick={() => handleAddToQueue(p.id)}
-                      className="px-3 py-1 bg-highlight)] text-color-bg)] rounded-md text-sm font-medium hover:opacity-90 transition"
+                      className="text-2xl hover:scale-110 transition text-[var(--color-text-secondary)]"
                       title="Add to Queue"
                     >
-                      ➕ Queue
+                      <MdOutlineAddToQueue />
                     </button>
 
                     <Link
