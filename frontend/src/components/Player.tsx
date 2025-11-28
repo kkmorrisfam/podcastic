@@ -5,6 +5,7 @@ import PlayButton from "./ui/PlayButton";
 import { usePlayerStore } from "../stores/usePlayerStore";
 import { useEffect, useRef, useState } from "react";
 import { formatEpisodeDate } from "../utils/storage";
+import  MusicSlider  from "../components/ui/Slider";
 
 
 const Player = () => {
@@ -37,7 +38,7 @@ const Player = () => {
       };
 
     //time event fires when the currentTime attribute updates
-    audio.addEventListener("timeUpdate",updateTime);
+    audio.addEventListener("timeupdate",updateTime);
 
     //loadedmetadata is fired when the browser has loaded enough of the audio file to determine metadata, including duration
     audio.addEventListener("loadedmetadata", updateDuration);
@@ -71,6 +72,13 @@ const Player = () => {
       audioRef.current.currentTime -=15;
     }
   }
+
+  const handleSeek = (value: number)=> {
+    if (audioRef.current) {
+      audioRef.current.currentTime = value;      
+    }
+    setCurrentTime(value);
+  };
 
   return (
     <>
@@ -133,7 +141,11 @@ const Player = () => {
           
           {/* player duration bar */}
           <div>
-              
+            <MusicSlider 
+              currentTime={currentTime}
+              duration={duration}
+              onSeek={handleSeek}
+            />       
               
           </div>
         </div>
