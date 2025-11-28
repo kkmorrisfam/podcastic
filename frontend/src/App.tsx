@@ -7,6 +7,7 @@ import PodcastDetailView from "./components/PodcastDetailView";
 import FavoritesView from "./components/FavoritesView";
 import { useEffect } from "react";
 import { hydratePlayerFromLocalStorage } from "./utils/playerPersistence";
+// import { PlayerDebug } from "./utils/playerDebug";
 
 export default function App() {
 
@@ -19,7 +20,7 @@ export default function App() {
     return(
         <>
             {/* <div className="min-h-screen flex flex-col" > */}
-               
+               {/* <PlayerDebug /> */}
                   <Routes>
                     {/* All pages share the MainLayout */}
                     <Route element={<MainLayout />}>
