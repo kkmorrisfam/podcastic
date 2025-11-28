@@ -137,14 +137,14 @@ export default function HomeView() {
                       {fav ? "★" : "☆"}
                     </button>
 
-                    {/* Add to Queue Button */}
+                    {/* Add to Queue Button
                     <button
                       onClick={() => handleAddToQueue(p.id)}
                       className="text-2xl hover:scale-110 transition text-[var(--color-text-secondary)]"
                       title="Add to Queue"
                     >
                       <MdOutlineAddToQueue />
-                    </button>
+                    </button> */}
 
                     <Link
                       to={`/podcast/${p.id}`}
