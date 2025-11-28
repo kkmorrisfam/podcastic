@@ -4,8 +4,10 @@ import {
   formatHHMMSS,
   isFavorite,
   toggleFavorite,
-  addToQueue,
+  // addToQueue,
 } from "../utils/storage";
+import { addEpisodeToQueueLocal, removeEpisodeFromQueueLocal } from "../utils/playerPersistence";
+import { usePlayerStore } from "../stores/usePlayerStore";
 
 import { useEffect, useState } from "react";
 import PlayButton from "./ui/PlayButton";
@@ -42,6 +44,8 @@ export default function EpisodeView({ feedId }: { feedId: number }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const queue = usePlayerStore((state) => state.queue);
+
   useEffect(() => {
     if (!feedId) return;
 
@@ -76,6 +80,20 @@ export default function EpisodeView({ feedId }: { feedId: number }) {
     fetchDetail();
   }, [feedId]);
 
+
+  const handleQueueClick = async (episode: Episode) => {
+    const isInQueue = queue.some((item) => item.episodeId === episode.id);
+
+    if (isInQueue) {
+      await removeEpisodeFromQueueLocal(episode.id);
+    } else {
+      await addEpisodeToQueueLocal(episode, {
+        toTop: false,
+        playIfEmpty: true,
+      });
+    }
+  };
+
   return (
     <>
       <div>
@@ -92,6 +110,9 @@ export default function EpisodeView({ feedId }: { feedId: number }) {
         {!loading && !error && (
           <div>
             {episodes.map((episode) => (
+
+              
+
               <div
                 key={episode.id}
                 className="grid items-center gap-4 py-3 border-b border-slate-200
@@ -137,7 +158,7 @@ export default function EpisodeView({ feedId }: { feedId: number }) {
                     className={`text-xl transition hover:scale-110 ${
                       isFavorite(episode.id.toString())
                         ? "text-pink-400"
-                        : "text-[var(--color-text-secondary)]"
+                        : "text-text-secondary"
                     }`}
                     title={
                       isFavorite(episode.id.toString())
@@ -149,10 +170,11 @@ export default function EpisodeView({ feedId }: { feedId: number }) {
                   </button>
 
                   {/* Queue Button */}
+                  
                   <button
-                    onClick={() => addToQueue(episode.id.toString())}
-                    className="text-2xl hover:scale-110 transition text-[var(--color-text-secondary)]"
-                    title="Add to Queue"
+                    onClick={() => { void handleQueueClick(episode); }}
+                    className="text-2xl hover:scale-110 transition text-text-secondary"
+                    title= "Add to Queue"
                   >
                     <MdOutlineAddToQueue />
                   </button>
