@@ -3,6 +3,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import podcastRoutes from "./routes/podcast.routes.js";
 import { connectMongo } from "./config/connectMongo.js";
+import authRoutes from "./routes/auth.routes.js";
+import collectionRoutes from "./routes/collection.routes.js";
 
 // Connect to DB
 connectMongo();
@@ -14,6 +16,9 @@ const PORT = process.env.PORT || 5050;
 
 app.use(cors({ origin: process.env.CORS_ORIGIN }));
 app.use(express.json());
+
+app.use("/api/auth", authRoutes);
+app.use("/api/user", collectionRoutes);
 
 // used for testing
 // app.use((req, _res, next) => {
