@@ -2,6 +2,10 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import podcastRoutes from "./routes/podcast.routes.js";
+import { connectMongo } from "./config/connectMongo.js";
+
+// Connect to DB
+connectMongo();
 
 dotenv.config();
 
