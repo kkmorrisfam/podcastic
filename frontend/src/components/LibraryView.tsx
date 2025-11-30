@@ -5,6 +5,7 @@ import {
   type PodcastSummary,
 } from "../utils/storage";
 import { Link } from "react-router-dom";
+import { CiCircleRemove } from "react-icons/ci";
 
 export default function LibraryView() {
   const [podcasts, setPodcasts] = useState<PodcastSummary[]>([]);
@@ -62,10 +63,10 @@ export default function LibraryView() {
                 <div className="mt-auto flex items-center justify-between gap-2">
                   <button
                     onClick={() => handleRemove(p.id)}
-                    className="text-xs px-2 py-1 rounded-full border border-border text-text-secondary hover:bg-surface/80 transition"
+                    className="text-2xl text-red-400 hover:text-red-500 hover:scale-110 transition"
                     title="Remove from Library"
                   >
-                    Remove
+                    <CiCircleRemove />
                   </button>
 
                   <Link

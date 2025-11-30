@@ -1,14 +1,17 @@
+import { LuLibrary } from "react-icons/lu";
 import { useEffect, useState } from "react";
 import {
   upsertMany,
   addToQueue,
   toggleFavorite,
   isFavorite,
+  addPodcastToLibrary,
+  removePodcastFromLibrary,
+  isPodcastInLibrary,
 } from "../utils/storage";
 
 import { Link } from "react-router-dom";
 import { MdOutlineAddToQueue } from "react-icons/md";
-
 
 // Interface for podcast data from backend
 interface Podcast {
@@ -22,7 +25,7 @@ interface Podcast {
 /**
  * HomeView Component
  * Displays Trending Podcasts
- * Fetches from backend API and allows adding to favorites & queue.
+ * Fetches from backend API and allows adding to favorites, queue & library.
  */
 export default function HomeView() {
   const [podcasts, setPodcasts] = useState<Podcast[]>([]);
@@ -40,7 +43,7 @@ export default function HomeView() {
       const data = await res.json();
       const feeds = data.feeds || [];
 
-      // Convert & store in LocalStorage library
+      // Convert & store in LocalStorage library (episode-like objects)
       upsertMany(
         feeds.map((f: Podcast) => ({
           id: String(f.id),
@@ -51,10 +54,10 @@ export default function HomeView() {
           author: f.author,
           publishedAt: undefined,
           durationSec: undefined,
+          episode: 0,
         }))
       );
 
-      // Set state
       setPodcasts(feeds);
     } catch (err) {
       console.error(err);
@@ -68,7 +71,7 @@ export default function HomeView() {
     fetchTrending();
   }, []);
 
-  // Handle toggling favorites
+  // Handle toggling favorites (episodes)
   const handleToggleFavorite = (id: number) => {
     const newState = toggleFavorite(String(id));
     setFavorites((prev) => {
@@ -79,36 +82,53 @@ export default function HomeView() {
     });
   };
 
-  // Handle adding to queue
+  // Handle adding to queue (unchanged)
   const handleAddToQueue = (id: number) => {
     addToQueue(String(id));
   };
 
+  // Handle adding/removing podcast from Library (shows)
+  const handleToggleLibrary = (p: Podcast) => {
+    const idStr = String(p.id);
+    if (isPodcastInLibrary(idStr)) {
+      removePodcastFromLibrary(idStr);
+    } else {
+      addPodcastToLibrary({
+        id: idStr,
+        title: p.title,
+        image: p.image,
+        author: p.author,
+        url: p.url,
+      });
+    }
+    // force re-render
+    setPodcasts((prev) => [...prev]);
+  };
+
   return (
-    <section className="w-full px-4 py-10 bg-bg)]">
-      <h2 className="text-2xl font-bold mb-8 text-center text-text-primary)]">
+    <section className="w-full px-4 py-10 bg-bg">
+      <h2 className="text-2xl font-bold mb-8 text-center text-text-primary">
         Trending Podcasts
       </h2>
 
       {loading && (
-        <p className="text-center text-lg text-text-secondary)] animate-pulse">
+        <p className="text-center text-lg text-text-secondary animate-pulse">
           Loading podcasts...
         </p>
       )}
 
-      {error && (
-        <p className="text-center text-red-400 mt-4">{error}</p>
-      )}
+      {error && <p className="text-center text-red-400 mt-4">{error}</p>}
 
       {!loading && !error && (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {podcasts.map((p) => {
             const fav = isFavorite(String(p.id));
+            const inLibrary = isPodcastInLibrary(String(p.id));
 
             return (
               <div
                 key={p.id}
-                className="podcast-card rounded-xl overflow-hidden shadow-lg bg-surface)] hover:shadow-xl transition duration-300"
+                className="podcast-card rounded-xl overflow-hidden shadow-lg bg-surface hover:shadow-xl transition duration-300"
               >
                 <img
                   src={p.image}
@@ -117,38 +137,52 @@ export default function HomeView() {
                 />
                 <div className="p-4 flex flex-col justify-between min-h-[150px]">
                   <div>
-                    <h3 className="font-semibold text-lg mb-1 truncate text-text-primary)]">
+                    <h3 className="font-semibold text-lg mb-1 truncate text-text-primary">
                       {p.title}
                     </h3>
-                    <p className="text-sm text-text-secondary)] mb-3 truncate">
+                    <p className="text-sm text-text-secondary mb-3 truncate">
                       {p.author}
                     </p>
                   </div>
 
-                  <div className="flex items-center justify-between mt-auto">
+                  <div className="flex items-center justify-between mt-auto gap-2">
                     {/* Favorite Button */}
                     <button
                       onClick={() => handleToggleFavorite(p.id)}
                       className={`text-xl ${
-                        fav ? "text-pink-400" : "text-text-secondary)]"
+                        fav ? "text-pink-400" : "text-text-secondary"
                       } hover:scale-110 transition`}
                       title={fav ? "Remove Favorite" : "Add Favorite"}
                     >
-                      {fav ? "★" : "☆"}
+                      {fav ? "♥" : "♡"}
                     </button>
 
-                    {/* Add to Queue Button
+                    {/* Library Button */}
+                    <button
+                      onClick={() => handleToggleLibrary(p)}
+                      className={`text-2xl hover:scale-110 transition ${
+                        inLibrary ? "text-highlight" : "text-text-secondary"
+                      }`}
+                      title={inLibrary ? "Remove from Library" : "Add to Library"}
+                    >
+                      <LuLibrary />
+                    </button>
+
+
+                    {/* Optional: Add to Queue (currently commented out) */}
+                    {/* 
                     <button
                       onClick={() => handleAddToQueue(p.id)}
-                      className="text-2xl hover:scale-110 transition text-[var(--color-text-secondary)]"
+                      className="text-2xl hover:scale-110 transition text-text-secondary"
                       title="Add to Queue"
                     >
                       <MdOutlineAddToQueue />
-                    </button> */}
+                    </button>
+                    */}
 
                     <Link
                       to={`/podcast/${p.id}`}
-                      className="text-highlight)] text-sm hover:underline"
+                      className="text-highlight text-sm hover:underline"
                     >
                       View Details →
                     </Link>
