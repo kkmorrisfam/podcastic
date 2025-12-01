@@ -25,6 +25,7 @@ export default function NavBar() {
     <nav className="flex items-center gap-6">
       <NavLink to="/" className={linkClasses}>Home</NavLink>
       {/* <NavLink to="/search" className={linkClasses}>Search</NavLink> */}
+      <NavLink to="/library" className={linkClasses}>Library</NavLink>
       <NavLink to="/favorites" className={linkClasses}>Favorites</NavLink>
 
       <form onSubmit={handleSearchSubmit} className="flex items-center ml-4">
