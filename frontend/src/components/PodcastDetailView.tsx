@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import EpisodeView from "./EpisodeView";
+import { API_BASE } from "../utils/config";
 
 interface PodcastDetail {
   id: number;
@@ -30,7 +31,7 @@ export default function PodcastDetailView() {
         setError(null);
 
         const res = await fetch(
-          `http://localhost:5050/api/podcast/detail/${encodeURIComponent(id)}`
+          `${API_BASE}/api/podcast/detail/${encodeURIComponent(id)}`
         );
 
         if (!res.ok) {

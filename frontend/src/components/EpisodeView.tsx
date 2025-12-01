@@ -8,6 +8,7 @@ import {
 } from "../utils/storage";
 import { addEpisodeToQueueLocal, removeEpisodeFromQueueLocal } from "../utils/playerPersistence";
 import { usePlayerStore } from "../stores/usePlayerStore";
+import { API_BASE } from "../utils/config";
 
 import { useEffect, useState } from "react";
 import PlayButton from "./ui/PlayButton";
@@ -55,7 +56,7 @@ export default function EpisodeView({ feedId }: { feedId: number }) {
         setError(null);
 
         const res = await fetch(
-          `http://localhost:5050/api/podcast/episodes/byfeedid/${feedId}`
+          `${API_BASE}/api/podcast/episodes/byfeedid/${feedId}`
         );
 
         if (!res.ok) {
