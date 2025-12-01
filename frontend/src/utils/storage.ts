@@ -1,6 +1,6 @@
 // ================================
 // Podcastic Storage Utilities
-// Handles: Library, Favorites, Queue, and Settings
+// Handles: Library, Favorites, Library, Queue, and Settings
 // ================================
 
 const NS = "pp"; 
@@ -9,6 +9,7 @@ export const STORAGE_KEYS = {
   FAVORITES: `${NS}.favorites.v1`,
   QUEUE: `${NS}.queue.v1`,
   SETTINGS: `${NS}.settings.v1`,
+  PODCAST_LIBRARY: `${NS}.podcastLibrary.v1`,
 } as const;
 
 export type StorageKey = typeof STORAGE_KEYS[keyof typeof STORAGE_KEYS];
@@ -31,6 +32,16 @@ export type Library = Record<string, Episode>;
 export type Favorites = string[];
 export type QueueItem = { episodeId: string };
 export type Queue = QueueItem[];
+
+export type PodcastSummary = {
+  id: string;        // podcast feed id as string
+  title: string;
+  image: string;
+  author?: string;
+  url?: string;
+};
+
+export type PodcastLibrary = Record<string, PodcastSummary>;
 
 // ---------- Safe JSON Helpers ----------
 function readJSON<T>(key: StorageKey, fallback: T): T {
@@ -80,6 +91,39 @@ export function removeEpisode(id: string): void {
   const lib = getLibrary();
   delete lib[id];
   writeJSON(STORAGE_KEYS.LIBRARY, lib);
+}
+
+// =====================================================
+// PODCAST LIBRARY (Saved Podcasts / Shows)
+// =====================================================
+
+export function getPodcastLibrary(): PodcastLibrary {
+  return readJSON<PodcastLibrary>(STORAGE_KEYS.PODCAST_LIBRARY, {});
+}
+
+export function setPodcastLibrary(lib: PodcastLibrary): void {
+  writeJSON(STORAGE_KEYS.PODCAST_LIBRARY, lib);
+}
+
+export function addPodcastToLibrary(p: PodcastSummary): void {
+  const lib = getPodcastLibrary();
+  lib[p.id] = { ...(lib[p.id] ?? {}), ...p };
+  setPodcastLibrary(lib);
+}
+
+export function removePodcastFromLibrary(id: string): void {
+  const lib = getPodcastLibrary();
+  delete lib[id];
+  setPodcastLibrary(lib);
+}
+
+export function isPodcastInLibrary(id: string): boolean {
+  const lib = getPodcastLibrary();
+  return !!lib[id];
+}
+
+export function listPodcastLibrary(): PodcastSummary[] {
+  return Object.values(getPodcastLibrary());
 }
 
 // =====================================================
