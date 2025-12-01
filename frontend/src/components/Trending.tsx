@@ -1,5 +1,6 @@
-import React, { Component, useEffect, useState } from "react";
-import { data } from "react-router";
+import {  useEffect, useState } from "react";
+
+import { API_BASE } from "../utils/config";
 
 // Podcast interface defines the shape of podcast data
 // retrieved from the PodcastIndex API.
@@ -25,7 +26,7 @@ export default function Trending() {
     try {
       setLoading(true);
       setError(null);
-      const res = await fetch("http://localhost:5050/api/podcast/trending");
+      const res = await fetch(`${API_BASE}/api/podcast/trending`);
       if (!res.ok) throw new Error("Failed to fetch podcasts");
       const data = await res.json();
       setPodcasts(data.feeds || []);
@@ -42,14 +43,14 @@ export default function Trending() {
   }, []);
 
   return (
-    <section className="w-full px-4 py-10 bg-[var(--color-bg)]">
+    <section className="w-full px-4 py-10 bg-bg">
       <div className="container">
-      <h2 className="text-2xl font-bold mb-8 text-center text-[var(--color-text-primary)]">
+      <h2 className="text-2xl font-bold mb-8 text-center text-text-primary">
         Trending Podcasts
       </h2>
 
       {loading && (
-        <p className="text-center text-lg text-[var(--color-text-secondary)] animate-pulse">
+        <p className="text-center text-lg text-text-secondary animate-pulse">
           Loading podcasts...
         </p>
       )}
@@ -71,14 +72,14 @@ export default function Trending() {
                 <h3 className="font-semibold text-lg mb-1 truncate">
                   {p.title}
                 </h3>
-                <p className="text-sm text-[var(--color-text-secondary)] mb-2 truncate">
+                <p className="text-sm text-text-secondary mb-2 truncate">
                   {p.author}
                 </p>
                 <a
                   href={p.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-[var(--color-highlight)] hover:underline text-sm"
+                  className="text-highlight hover:underline text-sm"
                 >
                   Visit Podcast →
                 </a>

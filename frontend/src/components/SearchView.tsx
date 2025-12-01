@@ -11,6 +11,7 @@ import {
 } from "../utils/storage";
 
 import { LuLibrary } from "react-icons/lu";
+import { API_BASE } from "../utils/config";
 interface Podcast {
   id: number;
   title: string;
@@ -38,7 +39,7 @@ export default function SearchView() {
       setError(null);
 
       const res = await fetch(
-        `http://localhost:5050/api/podcast/search?term=${encodeURIComponent(
+        `${API_BASE}/api/podcast/search?term=${encodeURIComponent(
           query
         )}`
       );

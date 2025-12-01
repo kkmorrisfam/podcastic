@@ -12,6 +12,7 @@ import {
 
 import { Link } from "react-router-dom";
 import { MdOutlineAddToQueue } from "react-icons/md";
+import { API_BASE } from "../utils/config";
 
 // Interface for podcast data from backend
 interface Podcast {
@@ -38,7 +39,7 @@ export default function HomeView() {
     try {
       setLoading(true);
       setError(null);
-      const res = await fetch("http://localhost:5050/api/podcast/trending");
+      const res = await fetch(`${API_BASE}/api/podcast/trending`);
       if (!res.ok) throw new Error("Failed to fetch podcasts");
       const data = await res.json();
       const feeds = data.feeds || [];
