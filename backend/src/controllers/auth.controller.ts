@@ -5,9 +5,10 @@ import User from "../models/User.js";
 
 export async function registerUser(req: Request, res: Response) {
   try {
-    const { email, password } = req.body;
-    if (!email || !password)
+    const { firstName, lastName, email, password } = req.body;
+    if (!firstName || !lastName || !email || !password) {
       return res.status(400).json({ error: "Missing email or password" });
+    }
 
     const existing = await User.findOne({ email });
     if (existing) return res.status(409).json({ error: "Email already used" });
@@ -15,6 +16,8 @@ export async function registerUser(req: Request, res: Response) {
     const hash = await bcrypt.hash(password, 10);
 
     const user = await User.create({
+      firstName,
+      lastName,
       email,
       passwordHash: hash,
       library: {},
@@ -22,7 +25,7 @@ export async function registerUser(req: Request, res: Response) {
       queue: [],
     });
 
-    return res.json({ id: user._id, email: user.email });
+    return res.json({ id: user._id, firstName: user.firstName, lastName: user.lastName, email: user.email });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: "Register failed" });
@@ -47,6 +50,8 @@ export async function loginUser(req: Request, res: Response) {
       token,
       user: {
         id: user._id,
+        firstName: user.firstName,  
+        lastName: user.lastName,     
         email: user.email,
       },
     });
@@ -55,3 +60,17 @@ export async function loginUser(req: Request, res: Response) {
     return res.status(500).json({ error: "Login failed" });
   }
 }
+
+export async function getAllUsers(_req: Request, res: Response) {
+  try {
+    const users = await User.find({}, "firstName lastName email createdAt");
+
+    return res.json({ users });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Failed to load users" });
+  }
+}
+
+
+
