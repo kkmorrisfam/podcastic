@@ -34,8 +34,7 @@ export const QueueView = () => {
 
   },[queue]);
   
-  if (loading) return <h2>Loading queue...</h2>;
-  if (error) return <h2 className="text-red-500">{error}</h2>;
+ 
   if (!episodes.length) return <h2>Your queue is empty.</h2>;
 
   const handleQueueClick = async (episode: Episode) => {
@@ -54,11 +53,11 @@ export const QueueView = () => {
   return (
     <>
       <div>
-        <div className="mb-4 text-xl font-semibold">Latest Episodes</div>
+        <div className="mb-4 text-xl font-semibold">My Playlist</div>
 
         {loading && (
           <p className="text-center text-lg text-text-secondary animate-pulse">
-            Loading podcasts...
+            Loading Playlist...
           </p>
         )}
 
