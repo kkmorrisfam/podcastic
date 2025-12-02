@@ -116,9 +116,9 @@ export default function EpisodeView({ feedId }: { feedId: number }) {
 
               <div
                 key={episode.id}
-                className="grid items-center gap-4 py-3 border-b border-slate-200
-                  grid-cols-[minmax(0,1fr)_auto]
-                  sm:grid-cols-[80px_60px_minmax(0,1fr)_250px]"
+                className="flex flex-col items-center gap-2 py-3 border-b border-slate-200
+                  sm:grid sm:items-center sm:gap4
+                  sm:grid-cols-[80px_60px_minmax(0,2fr)_120px_auto]"
               >
                 {/* Thumbnail */}
                 <div className="hidden sm:block h-20 w-20 overflow-hidden rounded-md">
@@ -139,8 +139,13 @@ export default function EpisodeView({ feedId }: { feedId: number }) {
                 )}
 
                 {/* Title */}
-                <div className="min-w-0 sm:col-span-1">
+                <div className="min-w-0 sm:col-span-1 w-full overflow-hidden">
                   <p className="truncate font-medium">{episode.title}</p>
+                </div>
+                {/* Episode Date */}
+                <div className="hidden sm:block text-sm text-text-secondary 
+                      whitespace-nowrap"> 
+                    {formatEpisodeDate(episode.publishedAt)} 
                 </div>
 
                 {/* ⭐ Duration + Favorite + Queue + Play (ALL INLINE) */}
