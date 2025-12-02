@@ -12,6 +12,7 @@ import LibraryView from "./components/LibraryView";
 import { useEffect } from "react";
 import { hydratePlayerFromLocalStorage } from "./utils/playerPersistence";
 import { useAuthStore } from "./stores/useAuthStore";
+import { QueueView } from "./components/QueueView";
 // import { PlayerDebug } from "./utils/playerDebug";
 
 export default function App() {
@@ -40,6 +41,7 @@ export default function App() {
                           <FavoritesView />
                         </RequireAuth>
                       } />
+                      <Route path="/queue" element={<QueueView />} />
                       <Route path="/podcast/:id" element={<PodcastDetailView />} />
                       {/* auth pages */}
                       <Route path="/login" element={<Login />} />

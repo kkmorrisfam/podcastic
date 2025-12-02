@@ -30,6 +30,7 @@ export default function NavBar() {
       {/* <NavLink to="/search" className={linkClasses}>Search</NavLink> */}
       <NavLink to="/library" className={linkClasses}>Library</NavLink>
       <NavLink to="/favorites" className={linkClasses}>Favorites</NavLink>
+      <NavLink to="/queue" className={linkClasses}>Playlist</NavLink>
 
       {/* ---------- Search Box ---------- */}
       <form onSubmit={handleSearchSubmit} className="flex items-center ml-4">
