@@ -65,9 +65,7 @@ export const QueueView = () => {
 
         {!loading && !error && (
           <div>
-            {episodes.map((episode) => (
-
-              
+            {episodes.map((episode) => (             
 
               <div
                 key={episode.id}
