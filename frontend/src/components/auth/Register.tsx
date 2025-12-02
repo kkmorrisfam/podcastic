@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 export default function Register() {
   const navigate = useNavigate();
 
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -13,10 +15,17 @@ export default function Register() {
     setError("");
 
     try {
-      const res = await fetch("/api/auth/register", {
+      const body = {
+        firstName,
+        lastName,
+        email,
+        password,
+      };
+
+      const res = await fetch("http://localhost:5050/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(body),
       });
 
       const data = await res.json();
@@ -26,6 +35,7 @@ export default function Register() {
         return;
       }
 
+      // Registration successful → send user to login
       navigate("/login");
     } catch {
       setError("Network error");
@@ -39,6 +49,28 @@ export default function Register() {
       {error && <p className="text-red-400 mb-4">{error}</p>}
 
       <form onSubmit={handleSubmit} className="space-y-4">
+
+        {/* FIRST NAME */}
+        <input
+          type="text"
+          placeholder="First Name"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          className="w-full p-2 border rounded"
+          required
+        />
+
+        {/* LAST NAME */}
+        <input
+          type="text"
+          placeholder="Last Name"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+          className="w-full p-2 border rounded"
+          required
+        />
+
+        {/* EMAIL */}
         <input
           value={email}
           type="email"
@@ -48,6 +80,7 @@ export default function Register() {
           required
         />
 
+        {/* PASSWORD */}
         <input
           value={password}
           type="password"
