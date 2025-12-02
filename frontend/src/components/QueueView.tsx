@@ -32,7 +32,7 @@ export const QueueView = () => {
         setLoading(false);
     }
 
-  }),[queue]
+  },[queue]);
   
   if (loading) return <h2>Loading queue...</h2>;
   if (error) return <h2 className="text-red-500">{error}</h2>;

@@ -37,10 +37,11 @@ export default function App() {
                       <Route path="/library" element={<LibraryView />} />
                       <Route path="/search" element={<SearchView />} />
                       <Route path="/favorites" element={
-                        <RequireAuth>
+                      
                           <FavoritesView />
-                        </RequireAuth>
+                                        
                       } />
+                       
                       <Route path="/queue" element={<QueueView />} />
                       <Route path="/podcast/:id" element={<PodcastDetailView />} />
                       {/* auth pages */}
