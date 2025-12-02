@@ -8,6 +8,7 @@ import MainLayout from "./components/layout/MainLayout";
 import Trending from "./components/Trending";
 import PodcastDetailView from "./components/PodcastDetailView";
 import FavoritesView from "./components/FavoritesView";
+import LibraryView from "./components/LibraryView";
 import { useEffect } from "react";
 import { hydratePlayerFromLocalStorage } from "./utils/playerPersistence";
 import { useAuthStore } from "./stores/useAuthStore";
@@ -32,6 +33,7 @@ export default function App() {
                       <Route path="/" element={<HomeView />} />
                       <Route path="/trending" element={<Trending/>} />
                       {/* ********Any route to a page that shares the MainLayout ******* */}
+                      <Route path="/library" element={<LibraryView />} />
                       <Route path="/search" element={<SearchView />} />
                       <Route path="/favorites" element={
                         <RequireAuth>

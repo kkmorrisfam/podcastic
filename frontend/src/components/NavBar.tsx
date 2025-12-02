@@ -27,6 +27,8 @@ export default function NavBar() {
 
       {/* ---------- Public Links ---------- */}
       <NavLink to="/" className={linkClasses}>Home</NavLink>
+      {/* <NavLink to="/search" className={linkClasses}>Search</NavLink> */}
+      <NavLink to="/library" className={linkClasses}>Library</NavLink>
       <NavLink to="/favorites" className={linkClasses}>Favorites</NavLink>
 
       {/* ---------- Search Box ---------- */}
