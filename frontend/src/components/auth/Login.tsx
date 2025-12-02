@@ -11,29 +11,40 @@ export default function Login() {
   const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
+  e.preventDefault();
+  setError("");
 
-    try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+  try {
+    const res = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
 
-      const data = await res.json();
+    const data = await res.json();
 
-      if (!res.ok) {
-        setError(data.error || "Login failed");
-        return;
-      }
-
-      login(data.user, data.token);
-      navigate("/");
-    } catch {
-      setError("Network error");
+    if (!res.ok) {
+      setError(data.error || "Login failed");
+      return;
     }
-  };
+
+    // Store user (now includes name)
+    login(
+      {
+        id: data.user.id,
+        email: data.user.email,
+        firstName: data.user.firstName,
+        lastName: data.user.lastName
+      },
+      data.token
+    );
+
+    navigate("/");
+  } catch {
+    setError("Network error");
+  }
+};
+
 
   return (
     <div className="max-w-md mx-auto mt-10 p-6 bg-surface rounded-xl shadow">

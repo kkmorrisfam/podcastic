@@ -79,9 +79,10 @@ export default function NavBar() {
 
         {user && (
           <>
-            <NavLink to="/library" className={linkClasses}>
-              Library
-            </NavLink>
+
+            <span className="text-sm md:text-base text-text-secondary">
+              Hi, {user.firstName}
+            </span>
 
             <button
               onClick={() => logout()}
