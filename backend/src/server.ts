@@ -42,7 +42,12 @@ connectMongo();
 const app = express();
 const PORT = process.env.PORT || 5050;
 
-app.use(cors({ origin: process.env.CORS_ORIGIN }));
+// app.use(cors({ origin: process.env.CORS_ORIGIN }));
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
