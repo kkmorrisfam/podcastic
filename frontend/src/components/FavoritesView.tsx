@@ -25,13 +25,13 @@ export default function FavoritesView() {
   };
 
   return (
-    <section className="w-full px-4 py-10 bg-[var(--color-bg)]">
-      <h1 className="text-3xl font-bold mb-8 text-[var(--color-text-primary)] text-center">
+    <section className="w-full px-4 py-10 bg-bg">
+      <h1 className="text-3xl font-bold mb-8 text-text-primary text-center">
         ⭐ Favorite Episodes
       </h1>
 
       {episodes.length === 0 && (
-        <p className="text-center text-[var(--color-text-secondary)]">
+        <p className="text-center text-text-secondary">
           You haven’t favorited any episodes yet.
         </p>
       )}
@@ -55,13 +55,13 @@ export default function FavoritesView() {
               {/* Title */}
               <div className="min-w-0">
                 <p className="truncate font-medium">{ep.title}</p>
-                <p className="text-sm text-[var(--color-text-secondary)]">
+                <p className="text-sm text-text-secondary">
                   {formatEpisodeDate(ep.publishedAt)}
                 </p>
               </div>
 
               {/* Duration */}
-              <div className="text-sm text-[var(--color-text-secondary)]">
+              <div className="text-sm text-text-secondary">
                 {formatHHMMSS(ep.durationSec)}
               </div>
 

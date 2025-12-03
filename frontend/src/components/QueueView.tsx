@@ -1,108 +1,63 @@
-import type { Episode } from "../utils/storage";
-import {
-  formatEpisodeDate,
-  formatHHMMSS,
-  isFavorite,
-  toggleFavorite,
-  // addToQueue,
-} from "../utils/storage";
-import { addEpisodeToQueueLocal, removeEpisodeFromQueueLocal } from "../utils/playerPersistence";
-import { usePlayerStore } from "../stores/usePlayerStore";
-import { API_BASE } from "../utils/config";
-
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react"
+import { getEpisode, toggleFavorite, formatEpisodeDate, formatHHMMSS, isFavorite } from "../utils/storage"
 import PlayButton from "./ui/PlayButton";
 import { MdOutlineAddToQueue } from "react-icons/md";
+import type { Episode } from "../utils/storage";
+import { usePlayerStore } from "../stores/usePlayerStore";
+import { addEpisodeToQueueLocal, removeEpisodeFromQueueLocal } from "../utils/playerPersistence";
 
+export const QueueView = () => {
 
-type ApiEpisode = {
-  id: number;
-  title: string;
-  episode: number;
-  image: string | null;
-  feedImage?: string;
-  datePublished: number;
-  duration: number;
-  enclosureUrl: string;
-  feedId: number;
-};
-
-function mapApiEpisodeToEpisode(api: ApiEpisode): Episode {
-  return {
-    id: api.id.toString(),
-    title: api.title,
-    image: api.image ?? api.feedImage ?? "",
-    publishedAt: api.datePublished,
-    durationSec: api.duration,
-    audioUrl: api.enclosureUrl,
-    feedImage: api.feedImage,
-    episode: api.episode,
-  };
-}
-
-export default function EpisodeView({ feedId }: { feedId: number }) {
-  const [episodes, setEpisodes] = useState<Episode[]>([]);
+  const queue = usePlayerStore((state) => state.queue);
+  const [episodes, setEpisodes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const queue = usePlayerStore((state) => state.queue);
-
-  useEffect(() => {
-    if (!feedId) return;
-
-    const fetchDetail = async () => {
-      try {
+  //get on initial render
+  useEffect(()=> {
+    try {
         setLoading(true);
         setError(null);
 
-        const res = await fetch(
-          `${API_BASE}/api/podcast/episodes/byfeedid/${feedId}`
-        );
+        //get queue from store, which get's from storage        
+        const episodes = queue
+            .map((item) => getEpisode(item.episodeId))
+            .filter(Boolean); //remove nulls if any episode is missing
 
-        if (!res.ok) {
-          throw new Error("Failed to fetch episode details");
-        }
-
-        const data = await res.json();
-        const apiEpisodes: ApiEpisode[] = data.items;
-
-        const mappedEpisodes: Episode[] =
-          apiEpisodes.map(mapApiEpisodeToEpisode);
-
-        setEpisodes(mappedEpisodes);
-      } catch (err) {
+        setEpisodes(episodes);
+    } catch (err) {
         console.error(err);
-        setError("Unable to load episode details. Please try again later.");
-      } finally {
+        setError("Unable to load queue. Please try again later.");
+    } finally {
         setLoading(false);
-      }
-    };
+    }
 
-    fetchDetail();
-  }, [feedId]);
-
+  },[queue]);
+  
+ 
+  if (!episodes.length) return <h2>Your queue is empty.</h2>;
 
   const handleQueueClick = async (episode: Episode) => {
-    const isInQueue = queue.some((item) => item.episodeId === episode.id);
-
-    if (isInQueue) {
-      await removeEpisodeFromQueueLocal(episode.id);
-    } else {
-      await addEpisodeToQueueLocal(episode, {
-        toTop: false,
-        playIfEmpty: true,
-      });
-    }
-  };
+      const isInQueue = queue.some((item) => item.episodeId === episode.id);
+  
+      if (isInQueue) {
+        await removeEpisodeFromQueueLocal(episode.id);
+      } else {
+        await addEpisodeToQueueLocal(episode, {
+          toTop: false,
+          playIfEmpty: true,
+        });
+      }
+    };
 
   return (
     <>
       <div>
-        <div className="mb-4 text-xl font-semibold">Latest Episodes</div>
+        <div className="mb-4 text-xl font-semibold">My Playlist</div>
 
         {loading && (
           <p className="text-center text-lg text-text-secondary animate-pulse">
-            Loading podcasts...
+            Loading Playlist...
           </p>
         )}
 
@@ -110,9 +65,7 @@ export default function EpisodeView({ feedId }: { feedId: number }) {
 
         {!loading && !error && (
           <div>
-            {episodes.map((episode) => (
-
-              
+            {episodes.map((episode) => (             
 
               <div
                 key={episode.id}
@@ -193,6 +146,7 @@ export default function EpisodeView({ feedId }: { feedId: number }) {
           </div>
         )}
       </div>
+
     </>
-  );
+  )
 }

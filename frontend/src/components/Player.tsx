@@ -10,11 +10,11 @@ import  MusicSlider  from "../components/ui/Slider";
 
 const Player = () => {
   // need to update state for isPlaying, currentEpisode, queue[]
-  const {currentEpisode, isPlaying, playPrevious, playNext} = usePlayerStore();
+  const {currentEpisode, playPrevious, playNext} = usePlayerStore();
 
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [volumne, setVolume] = useState(75);
+
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
