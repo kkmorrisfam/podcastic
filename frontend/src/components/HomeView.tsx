@@ -11,7 +11,7 @@ import {
 } from "../utils/storage";
 
 import { Link } from "react-router-dom";
-import { MdOutlineAddToQueue } from "react-icons/md";
+// import { MdOutlineAddToQueue } from "react-icons/md";
 import { API_BASE } from "../utils/config";
 
 // Interface for podcast data from backend
@@ -39,7 +39,12 @@ export default function HomeView() {
     try {
       setLoading(true);
       setError(null);
-      const res = await fetch(`${API_BASE}/api/podcast/trending`);
+
+      // Get browser language and strip region: "en-US" → "en"
+      const userLang = navigator.language?.split("-")[0] || "en";
+
+
+      const res = await fetch(`${API_BASE}/api/podcast/trending?lang=${userLang}`);
       if (!res.ok) throw new Error("Failed to fetch podcasts");
       const data = await res.json();
       const feeds = data.feeds || [];
@@ -84,9 +89,9 @@ export default function HomeView() {
   };
 
   // Handle adding to queue (unchanged)
-  const handleAddToQueue = (id: number) => {
-    addToQueue(String(id));
-  };
+  // const handleAddToQueue = (id: number) => {
+  //   addToQueue(String(id));
+  // };
 
   // Handle adding/removing podcast from Library (shows)
   const handleToggleLibrary = (p: Podcast) => {
