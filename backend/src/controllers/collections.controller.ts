@@ -4,7 +4,8 @@ import User from "../models/User.js";
 
 export async function getUserData(req: Request, res: Response) {
   try {
-    const user = await User.findById(req.params.userId);
+    const userId = (req as any).user.id;  // from JWT auth
+    const user = await User.findById(userId);  //took out req.params.userid
     if (!user) return res.status(404).json({ error: "User not found" });
 
     return res.json({
@@ -19,7 +20,8 @@ export async function getUserData(req: Request, res: Response) {
 
 export async function updateLibrary(req: Request, res: Response) {
   try {
-    const { userId } = req.params;
+    const userId = (req as any).user.id;
+    // const { userId } = req.params;
     const { library } = req.body; // { [episodeId]: Episode }
 
     const user = await User.findByIdAndUpdate(
@@ -36,7 +38,8 @@ export async function updateLibrary(req: Request, res: Response) {
 
 export async function updateFavorites(req: Request, res: Response) {
   try {
-    const { userId } = req.params;
+    const userId = (req as any).user.id;
+    // const { userId } = req.params;
     const { favorites } = req.body; // string[]
 
     const user = await User.findByIdAndUpdate(
@@ -53,7 +56,8 @@ export async function updateFavorites(req: Request, res: Response) {
 
 export async function updateQueue(req: Request, res: Response) {
   try {
-    const { userId } = req.params;
+    const userId = (req as any).user.id;
+    //const { userId } = req.params;
     const { queue } = req.body; // { episodeId }[]
 
     const user = await User.findByIdAndUpdate(

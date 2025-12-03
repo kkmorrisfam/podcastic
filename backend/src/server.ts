@@ -16,28 +16,28 @@ const app = express();
 const PORT = process.env.PORT || 5050;
 
 // app.use(cors({ origin: process.env.CORS_ORIGIN }));
-app.use(
+/* app.use(
   cors({
     origin: "*",
   })
-);
+); */
 
-/* const allowedOrigins = [
-  "http://localhost:5173",                 // dev
+const allowedOrigins = [
+  "http://localhost:3000",                 // dev
   "https://podcastic-dun.vercel.app",      // Vercel frontend
 ];
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin) return callback(null, true); // tools / server-to-server
+      if (!origin) return callback(null, true); // postman / server-to-server
       if (allowedOrigins.includes(origin)) return callback(null, true);
       return callback(new Error("Not allowed by CORS"));
     },
   })
 );
 
- */
+
 
 app.use(express.json());
 

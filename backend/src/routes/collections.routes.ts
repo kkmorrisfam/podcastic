@@ -4,9 +4,13 @@ import {
     updateLibrary,
     updateFavorites,
     updateQueue,
-} from "../controllers/collections.controller.js";
+} from "../controllers/collections.controller";
+import { requireAuth } from "../middleware/requireAuth";
 
 const router = express.Router();
+
+// everything below this requires a valid JWT
+router.use(requireAuth);
 
 router.get("/:userId", getUserData);
 

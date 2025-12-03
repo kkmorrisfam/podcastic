@@ -3,13 +3,14 @@
 // Handles: Library, Favorites, Library, Queue, and Settings
 // ================================
 
+// what are the keys called in local storage...
 const NS = "pp"; 
 export const STORAGE_KEYS = {
-  LIBRARY: `${NS}.library.v1`,
+  LIBRARY: `${NS}.library.v1`,    //master user library and storage cache for all podcasts and episodes
   FAVORITES: `${NS}.favorites.v1`,
   QUEUE: `${NS}.queue.v1`,
   SETTINGS: `${NS}.settings.v1`,
-  PODCAST_LIBRARY: `${NS}.podcastLibrary.v1`,
+  PODCAST_LIBRARY: `${NS}.podcastLibrary.v1`,  //user library
 } as const;
 
 export type StorageKey = typeof STORAGE_KEYS[keyof typeof STORAGE_KEYS];
@@ -38,7 +39,7 @@ export type PodcastSummary = {
   title: string;
   image: string;
   author?: string;
-  url?: string;
+  url?: string; 
 };
 
 export type PodcastLibrary = Record<string, PodcastSummary>;
@@ -67,13 +68,13 @@ function writeJSON<T>(key: StorageKey, value: T): void {
 // LIBRARY (Episodes Dictionary)
 // =====================================================
 export function getLibrary(): Library {
-  return readJSON<Library>(STORAGE_KEYS.LIBRARY, {});
+  return readJSON<Library>(STORAGE_KEYS.LIBRARY, {});   //from the key pp.library.v1 get the values, return as json
 }
 
 export function upsertEpisode(ep: Episode): void {
   const lib = getLibrary();
-  lib[ep.id] = { ...(lib[ep.id] ?? {}), ...ep };
-  writeJSON(STORAGE_KEYS.LIBRARY, lib);
+  lib[ep.id] = { ...(lib[ep.id] ?? {}), ...ep };  // look up field w/ id, if exists, use it, else use {}, then overwrite those fields with new episode data
+  writeJSON(STORAGE_KEYS.LIBRARY, lib);           // write at key pp.library.v1, value of episode id passed in
 }
 
 export function upsertMany(episodes: Episode[]): void {

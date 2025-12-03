@@ -32,7 +32,7 @@ export default function App() {
                     {/* All pages share the MainLayout */}
                     <Route element={<MainLayout />}>
                       <Route path="/" element={<HomeView />} />
-                      <Route path="/trending" element={<Trending/>} />
+                      {/* <Route path="/trending" element={<Trending/>} /> */}
                       {/* ********Any route to a page that shares the MainLayout ******* */}
                       <Route path="/library" element={<LibraryView />} />
                       <Route path="/search" element={<SearchView />} />
