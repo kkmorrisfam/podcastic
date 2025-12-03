@@ -1,5 +1,5 @@
-console.log("Starting server...");
-console.log("Loaded cors");
+// console.log("Starting server...");
+// console.log("Loaded cors");
 
 
 // import express from "express";
@@ -48,6 +48,24 @@ app.use(
     origin: "*",
   })
 );
+
+/* const allowedOrigins = [
+  "http://localhost:5173",                 // dev
+  "https://podcastic-dun.vercel.app",      // Vercel frontend
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true); // tools / server-to-server
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+      return callback(new Error("Not allowed by CORS"));
+    },
+  })
+);
+
+ */
+
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
