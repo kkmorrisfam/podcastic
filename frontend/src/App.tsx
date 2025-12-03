@@ -18,10 +18,9 @@ import { QueueView } from "./components/QueueView";
 export default function App() {
 
     // get data from local storage and sync to state
-    useEffect(() => {
-      hydratePlayerFromLocalStorage();
-
-    useAuthStore.getState().hydrate();
+    useEffect(() => {      
+      useAuthStore.getState().hydrate();  
+      hydratePlayerFromLocalStorage();    
   }, []);
 
     return(

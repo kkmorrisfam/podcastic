@@ -12,10 +12,10 @@ const router = express.Router();
 // everything below this requires a valid JWT
 router.use(requireAuth);
 
-router.get("/:userId", getUserData);
+router.get("/me", getUserData);
 
-router.post("/:userId/library", updateLibrary);
-router.post("/:userId/favorites", updateFavorites);
-router.post("/:userId/queue", updateQueue);
+router.post("/me/library", updateLibrary);
+router.post("/me/favorites", updateFavorites);
+router.post("/me/queue", updateQueue);
 
 export default router;

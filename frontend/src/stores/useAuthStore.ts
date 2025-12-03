@@ -17,7 +17,7 @@ interface AuthState {
   hydrate: () => void;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
+export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,
   token: null,
 
@@ -40,4 +40,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     localStorage.removeItem("auth.user");
     set({ user: null, token: null });
   },
+
+  isLoggedIn: ()=>!!get().token,
+  
 }));
