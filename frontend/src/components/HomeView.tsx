@@ -2,16 +2,16 @@ import { LuLibrary } from "react-icons/lu";
 import { useEffect, useState } from "react";
 import {
   upsertMany,
-  addToQueue,
-  toggleFavorite,
-  isFavorite,
+  // addToQueue,
+  // toggleFavorite,
+  // isFavorite,
   addPodcastToLibrary,
   removePodcastFromLibrary,
   isPodcastInLibrary,
 } from "../utils/storage";
 
 import { Link } from "react-router-dom";
-import { MdOutlineAddToQueue } from "react-icons/md";
+// import { MdOutlineAddToQueue } from "react-icons/md";
 import { API_BASE } from "../utils/config";
 
 // Interface for podcast data from backend
@@ -32,14 +32,19 @@ export default function HomeView() {
   const [podcasts, setPodcasts] = useState<Podcast[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [favorites, setFavorites] = useState<Set<number>>(new Set());
+  // const [favorites, setFavorites] = useState<Set<number>>(new Set());
 
   // Fetch trending podcasts from backend
   const fetchTrending = async () => {
     try {
       setLoading(true);
       setError(null);
-      const res = await fetch(`${API_BASE}/api/podcast/trending`);
+
+      // Get browser language and strip region: "en-US" → "en"
+      const userLang = navigator.language?.split("-")[0] || "en";
+
+
+      const res = await fetch(`${API_BASE}/api/podcast/trending?lang=${userLang}`);
       if (!res.ok) throw new Error("Failed to fetch podcasts");
       const data = await res.json();
       const feeds = data.feeds || [];
@@ -73,20 +78,20 @@ export default function HomeView() {
   }, []);
 
   // Handle toggling favorites (episodes)
-  const handleToggleFavorite = (id: number) => {
-    const newState = toggleFavorite(String(id));
-    setFavorites((prev) => {
-      const next = new Set(prev);
-      if (newState) next.add(id);
-      else next.delete(id);
-      return next;
-    });
-  };
+  // const handleToggleFavorite = (id: number) => {
+  //   const newState = toggleFavorite(String(id));
+  //   setFavorites((prev) => {
+  //     const next = new Set(prev);
+  //     if (newState) next.add(id);
+  //     else next.delete(id);
+  //     return next;
+  //   });
+  // };
 
   // Handle adding to queue (unchanged)
-  const handleAddToQueue = (id: number) => {
-    addToQueue(String(id));
-  };
+  // const handleAddToQueue = (id: number) => {
+  //   addToQueue(String(id));
+  // };
 
   // Handle adding/removing podcast from Library (shows)
   const handleToggleLibrary = (p: Podcast) => {
@@ -123,7 +128,7 @@ export default function HomeView() {
       {!loading && !error && (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {podcasts.map((p) => {
-            const fav = isFavorite(String(p.id));
+            // const fav = isFavorite(String(p.id));
             const inLibrary = isPodcastInLibrary(String(p.id));
 
             return (
@@ -147,7 +152,7 @@ export default function HomeView() {
                   </div>
 
                   <div className="flex items-center justify-between mt-auto gap-2">
-                    {/* Favorite Button */}
+                    {/* Favorite Button 
                     <button
                       onClick={() => handleToggleFavorite(p.id)}
                       className={`text-xl ${
@@ -156,7 +161,7 @@ export default function HomeView() {
                       title={fav ? "Remove Favorite" : "Add Favorite"}
                     >
                       {fav ? "♥" : "♡"}
-                    </button>
+                    </button> */}
 
                     {/* Library Button */}
                     <button
