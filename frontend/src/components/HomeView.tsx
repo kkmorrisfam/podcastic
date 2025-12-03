@@ -2,9 +2,9 @@ import { LuLibrary } from "react-icons/lu";
 import { useEffect, useState } from "react";
 import {
   upsertMany,
-  addToQueue,
-  toggleFavorite,
-  isFavorite,
+  // addToQueue,
+  // toggleFavorite,
+  // isFavorite,
   addPodcastToLibrary,
   removePodcastFromLibrary,
   isPodcastInLibrary,
@@ -32,7 +32,7 @@ export default function HomeView() {
   const [podcasts, setPodcasts] = useState<Podcast[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [favorites, setFavorites] = useState<Set<number>>(new Set());
+  // const [favorites, setFavorites] = useState<Set<number>>(new Set());
 
   // Fetch trending podcasts from backend
   const fetchTrending = async () => {
@@ -78,15 +78,15 @@ export default function HomeView() {
   }, []);
 
   // Handle toggling favorites (episodes)
-  const handleToggleFavorite = (id: number) => {
-    const newState = toggleFavorite(String(id));
-    setFavorites((prev) => {
-      const next = new Set(prev);
-      if (newState) next.add(id);
-      else next.delete(id);
-      return next;
-    });
-  };
+  // const handleToggleFavorite = (id: number) => {
+  //   const newState = toggleFavorite(String(id));
+  //   setFavorites((prev) => {
+  //     const next = new Set(prev);
+  //     if (newState) next.add(id);
+  //     else next.delete(id);
+  //     return next;
+  //   });
+  // };
 
   // Handle adding to queue (unchanged)
   // const handleAddToQueue = (id: number) => {
@@ -128,7 +128,7 @@ export default function HomeView() {
       {!loading && !error && (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {podcasts.map((p) => {
-            const fav = isFavorite(String(p.id));
+            // const fav = isFavorite(String(p.id));
             const inLibrary = isPodcastInLibrary(String(p.id));
 
             return (
@@ -152,7 +152,7 @@ export default function HomeView() {
                   </div>
 
                   <div className="flex items-center justify-between mt-auto gap-2">
-                    {/* Favorite Button */}
+                    {/* Favorite Button 
                     <button
                       onClick={() => handleToggleFavorite(p.id)}
                       className={`text-xl ${
@@ -161,7 +161,7 @@ export default function HomeView() {
                       title={fav ? "Remove Favorite" : "Add Favorite"}
                     >
                       {fav ? "♥" : "♡"}
-                    </button>
+                    </button> */}
 
                     {/* Library Button */}
                     <button

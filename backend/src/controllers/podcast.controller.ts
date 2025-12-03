@@ -56,6 +56,8 @@ function getHeaders() {
 export async function getTrending(_req: Request, res: Response) {
   try {
     const lang = (_req.query.lang as string) || "en";
+    // console.log("request.query.lang: " + _req.query.lang);
+
     const response = await fetch(`${API_BASE}/podcasts/trending?max=20&lang=${lang}`, {
       headers: getHeaders(),
     });
