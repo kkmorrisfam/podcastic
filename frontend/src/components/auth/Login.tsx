@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../stores/useAuthStore";
+import { API_BASE } from "../../utils/config";
+
+
 
 export default function Login() {
   const navigate = useNavigate();
@@ -15,7 +18,7 @@ export default function Login() {
   setError("");
 
   try {
-    const res = await fetch("/api/auth/login", {
+    const res = await fetch(`${API_BASE}/api/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
