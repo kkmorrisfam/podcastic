@@ -44,7 +44,7 @@ async function persistSnapshot() {
 
       //make sure you are just saving episode data (local storage includes podcast and episoce data)
       const episodesOnly = Object.fromEntries(
-        Object.entries(library).filter(([_, item])=> item.audioUrl)  //audioUrl is only in the episode type
+        Object.entries(library).filter(([_, item])=> item.durationSec)  //durationSec is only in the episode type
       );
 
       await Promise.all([
