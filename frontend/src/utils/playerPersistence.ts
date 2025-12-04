@@ -1,5 +1,5 @@
 import { usePlayerStore } from "../stores/usePlayerStore";
-import { getLibrary, getQueue, setQueue, upsertMany} from "../utils/storage";
+import { getFavorites, getLibrary, getQueue, setQueue, upsertMany} from "../utils/storage";
 import type { Episode } from "../utils/storage";
 import { useAuthStore } from "../stores/useAuthStore";
 import { fetchUserCollections, saveLibrary, saveQueue } from "./collectionApi";
@@ -10,7 +10,7 @@ export async function hydratePlayer() {
   if (isLoggedIn()) {
     // logged in → hydrate from backend
     try {
-      const { library, queue } = await fetchUserCollections();
+      const { library, queue } = await fetchUserCollections();  
       usePlayerStore
         .getState()
         .hydrateFromPersistence(library ?? {}, queue ?? []);
@@ -29,20 +29,27 @@ export async function hydratePlayer() {
 export async function hydratePlayerFromLocalStorage() {
   const library = getLibrary() ?? {};
   const queue = getQueue() ?? [];
+  
 
   usePlayerStore.getState().hydrateFromPersistence(library, queue);
 }
 
-// 2) Snapshot current Zustand state back into localStorage
+// 2) Snapshot current Zustand state back into localStorage or if logged in: database
 async function persistSnapshot() {
   const { queue, library } = usePlayerStore.getState();
   const { isLoggedIn } = useAuthStore.getState();
 
   if(isLoggedIn()) {
     try {
+
+      //make sure you are just saving episode data (local storage includes podcast and episoce data)
+      const episodesOnly = Object.fromEntries(
+        Object.entries(library).filter(([_, item])=> item.audioUrl)  //audioUrl is only in the episode type
+      );
+
       await Promise.all([
         saveQueue(queue),
-        saveLibrary(library),
+        saveLibrary(episodesOnly),
         //move save favorites to here?
       ])
 
@@ -67,19 +74,20 @@ export async function addEpisodeToQueueLocal(
   episode: Episode,
   opts?: { toTop?: boolean; playIfEmpty?: boolean }
 ) {
-  usePlayerStore.getState().addToQueueStore(episode, opts);
-  persistSnapshot();
+  usePlayerStore.getState().addToQueueStore(episode, opts);  //adds episode to queue state
+  await persistSnapshot();                                  // adds episode state to queue database or local storage
 }
 
 export async function removeEpisodeFromQueueLocal(episodeId: string) {
-  usePlayerStore.getState().removeFromQueueStore(episodeId);
-  persistSnapshot();
+  usePlayerStore.getState().removeFromQueueStore(episodeId);  //removed episode from queue state
+  await persistSnapshot();                                    // removes episode state from queue database or local storage
 }
 
+// do I need this?
 export async function playEpisodesLocal(
   episodes: Episode[],
   startIndex = 0
 ) {
   usePlayerStore.getState().playEpisode(episodes, startIndex);
-  persistSnapshot();
+  await persistSnapshot();
 }

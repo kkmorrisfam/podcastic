@@ -30,7 +30,12 @@ const UserSchema = new mongoose.Schema(
     },
 
     favorites: {
-      type: [String],
+      type: [String],  //episode ids
+      default: [],
+    },
+
+    podcastLibrary: {
+      type: [String],  //feed ids
       default: [],
     },
 
