@@ -114,12 +114,12 @@ const Player = () => {
 
           {/* Back, Forward, Play, Pause */}
           <div className="flex items-center gap-4">          
-            <button onClick={playPrevious}  className="play-icon" >
+            <button onClick={playPrevious}  className="play-icon" title="Previous Episode">
               <RiSkipBackLine />
             </button>
             
               {/* Back 15sec control*/}
-            <button onClick={handleBack15Sec}  className="play-icon">            
+            <button onClick={handleBack15Sec}  className="play-icon" title="Rewind 15 Seconds">            
               <RiReplay15Line className="play-icon"/>
             </button>
 
@@ -129,11 +129,11 @@ const Player = () => {
             </div>
 
             {/* Forward 15sec control*/}            
-            <button onClick={handleFwd15Sec} className="play-icon">
+            <button onClick={handleFwd15Sec} className="play-icon" title="Forward 15 Seconds">
               <RiForward15Line />
             </button>
             
-            <button onClick={playNext}  className="play-icon">
+            <button onClick={playNext}  className="play-icon" title="Next Episode">
               <RiSkipForwardLine />
             </button>
             

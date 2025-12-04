@@ -18,6 +18,10 @@ export default function LibraryView() {
     refresh();
   }, []);
 
+  useEffect(() => {
+  document.title = "Your Library • Podcastic";
+}, []);
+
   const handleRemove = (id: string) => {
     removePodcastFromLibrary(id);
     refresh();

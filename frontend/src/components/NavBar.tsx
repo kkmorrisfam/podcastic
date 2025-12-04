@@ -26,11 +26,11 @@ export default function NavBar() {
     <nav className="flex items-center gap-6">
 
       {/* ---------- Public Links ---------- */}
-      <NavLink to="/" className={linkClasses}>Home</NavLink>
+      <NavLink to="/" className={linkClasses} title="Go to Home">Home</NavLink>
       {/* <NavLink to="/search" className={linkClasses}>Search</NavLink> */}
-      <NavLink to="/library" className={linkClasses}>Library</NavLink>
-      <NavLink to="/favorites" className={linkClasses}>Favorites</NavLink>
-      <NavLink to="/queue" className={linkClasses}>Playlist</NavLink>
+      <NavLink to="/library" className={linkClasses} title="View Your Library">Library</NavLink>
+      <NavLink to="/favorites" className={linkClasses} title="View Favorite Episodes">Favorites</NavLink>
+      <NavLink to="/queue" className={linkClasses} title="View Your Playlist">Playlist</NavLink>
 
       {/* ---------- Search Box ---------- */}
       <form onSubmit={handleSearchSubmit} className="flex items-center ml-4">
@@ -52,6 +52,7 @@ export default function NavBar() {
 
         <button
           type="submit"
+          title="Search"
           className="
             hidden sm:block
             px-3 py-1.5 bg-highlight 
@@ -68,11 +69,11 @@ export default function NavBar() {
 
         {!user && (
           <>
-            <NavLink to="/login" className={linkClasses}>
+            <NavLink to="/login" className={linkClasses} title="Sign In"> 
               Login
             </NavLink>
 
-            <NavLink to="/register" className={linkClasses}>
+            <NavLink to="/register" className={linkClasses} title="Create an Account">
               Register
             </NavLink>
           </>
