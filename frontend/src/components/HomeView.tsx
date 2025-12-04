@@ -77,6 +77,10 @@ export default function HomeView() {
     fetchTrending();
   }, []);
 
+  useEffect(() => {
+  document.title = "Trending Podcasts • Podcastic";
+}, []);
+
   // Handle toggling favorites (episodes)
   // const handleToggleFavorite = (id: number) => {
   //   const newState = toggleFavorite(String(id));

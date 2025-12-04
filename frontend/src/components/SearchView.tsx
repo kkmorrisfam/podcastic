@@ -24,6 +24,13 @@ export default function SearchView() {
   const [params] = useSearchParams();
   const term = params.get("term") || "";
 
+  useEffect(() => {
+  document.title = term
+    ? `Search: ${term} • Podcastic`
+    : "Search • Podcastic";
+}, [term]);
+
+
   const [results, setResults] = useState<Podcast[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
