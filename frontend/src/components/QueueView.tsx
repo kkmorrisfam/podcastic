@@ -33,7 +33,11 @@ export const QueueView = () => {
     }
 
   },[queue]);
-  
+
+  useEffect(() => {
+  document.title = "My Playlist • Podcastic";
+}, []);
+ 
  
   if (!episodes.length) return <h2>Your queue is empty.</h2>;
 
@@ -101,7 +105,7 @@ export const QueueView = () => {
                     {formatEpisodeDate(episode.publishedAt)} 
                 </div>
 
-                {/* ⭐ Duration + Favorite + Queue + Play (ALL INLINE) */}
+                {/* Duration + Favorite + Queue + Play (ALL INLINE) */}
                 <div className="flex items-center justify-start gap-6">
                   {/* Duration */}
                   <span className="text-sm text-text-secondary">
@@ -133,7 +137,11 @@ export const QueueView = () => {
                   <button
                     onClick={() => { void handleQueueClick(episode); }}
                     className="text-2xl hover:scale-110 transition text-text-secondary"
-                    title= "Add to Queue"
+                    title={
+                      queue.some((item) => item.episodeId === episode.id)
+                        ? "Remove from Queue"
+                        : "Add to Queue"
+                    } 
                   >
                     <MdOutlineAddToQueue />
                   </button>

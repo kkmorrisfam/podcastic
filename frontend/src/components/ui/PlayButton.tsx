@@ -28,6 +28,7 @@ const PlayButton = ( {episode}: {episode:Episode | null}  ) => {
     <button 
       onClick={handleClick}
       className="player-button"
+      title={isCurrentEpisode && isPlaying ? "Pause" : "Play"}
     >
       {isCurrentEpisode && isPlaying ? (
         <FaPause className="size-5 play-icon" />

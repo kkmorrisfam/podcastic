@@ -16,6 +16,11 @@ export default function FavoritesView() {
     setEpisodes(eps);
   }, []);
 
+  useEffect(() => {
+  document.title = "Favorite Episodes • Podcastic";
+}, []);
+
+
   const handleToggleFavorite = (id: string) => {
     toggleFavorite(id);
 
