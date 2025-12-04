@@ -5,12 +5,12 @@ import RequireAuth from "./components/auth/RequireAuth";
 import HomeView from "./components/HomeView";
 import SearchView from "./components/SearchView";
 import MainLayout from "./components/layout/MainLayout";
-import Trending from "./components/Trending";
+// import Trending from "./components/Trending";
 import PodcastDetailView from "./components/PodcastDetailView";
 import FavoritesView from "./components/FavoritesView";
 import LibraryView from "./components/LibraryView";
 import { useEffect } from "react";
-import { hydratePlayerFromLocalStorage } from "./utils/playerPersistence";
+import { hydratePlayer } from "./utils/playerPersistence";
 import { useAuthStore } from "./stores/useAuthStore";
 import { QueueView } from "./components/QueueView";
 // import { PlayerDebug } from "./utils/playerDebug";
@@ -20,7 +20,7 @@ export default function App() {
     // get data from local storage and sync to state
     useEffect(() => {      
       useAuthStore.getState().hydrate();  
-      hydratePlayerFromLocalStorage();    
+      hydratePlayer();    
   }, []);
 
     return(

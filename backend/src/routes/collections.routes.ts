@@ -4,7 +4,7 @@ import {
     updateLibrary,
     updateFavorites,
     updateQueue,
-} from "../controllers/collections.controller";
+} from "../controllers/collections.controller.js";
 import { requireAuth } from "../middleware/requireAuth";
 
 const router = express.Router();

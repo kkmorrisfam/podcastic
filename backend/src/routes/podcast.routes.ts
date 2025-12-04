@@ -1,5 +1,5 @@
 import express from "express";
-import { getTrending, searchByTerm, getPodcastDetail, getEpisodes, getEpisodeById } from "../controllers/podcast.controller";
+import { getTrending, searchByTerm, getPodcastDetail, getEpisodes, getEpisodeById } from "../controllers/podcast.controller.js";
 
 const router = express.Router();
 

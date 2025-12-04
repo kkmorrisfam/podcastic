@@ -1,6 +1,28 @@
 import { usePlayerStore } from "../stores/usePlayerStore";
 import { getLibrary, getQueue, setQueue, upsertMany} from "../utils/storage";
 import type { Episode } from "../utils/storage";
+import { useAuthStore } from "../stores/useAuthStore";
+import { fetchUserCollections, saveLibrary, saveQueue } from "./collectionApi";
+
+// Hydrate store from database if logged in
+export async function hydratePlayer() {
+  if (useAuthStore.isLoggedIn()) {
+    // logged in → hydrate from backend
+    try {
+      const { library, queue } = await fetchUserCollections();
+      usePlayerStore
+        .getState()
+        .hydrateFromPersistence(library ?? {}, queue ?? []);
+    } catch (e) {
+      console.error("Failed to hydrate from backend, falling back to local", e);
+      await hydratePlayerFromLocalStorage();
+    }
+  } else {
+    // guest
+    await hydratePlayerFromLocalStorage();
+  }
+}
+
 
 // 1) Hydrate store from localStorage
 export async function hydratePlayerFromLocalStorage() {

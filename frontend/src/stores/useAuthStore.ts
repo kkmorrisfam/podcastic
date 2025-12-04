@@ -15,6 +15,7 @@ interface AuthState {
   login: (user: User, token: string) => void;
   logout: () => void;
   hydrate: () => void;
+  isLoggedIn: () => boolean;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -42,5 +43,5 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   isLoggedIn: ()=>!!get().token,
-  
+
 }));
