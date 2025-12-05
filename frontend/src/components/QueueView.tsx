@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react"
 // import { getEpisode, toggleFavorite, formatEpisodeDate, formatHHMMSS, isFavorite } from "../utils/storage"
-import { formatEpisodeDate, formatHHMMSS } from "../utils/storage"
+import { formatEpisodeDate, formatHHMMSS, isFavorite } from "../utils/storage"
 import PlayButton from "./ui/PlayButton";
 import { MdOutlineAddToQueue } from "react-icons/md";
 import type { Episode } from "../utils/storage";
 import { usePlayerStore } from "../stores/usePlayerStore";
 import { addEpisodeToQueueLocal, removeEpisodeFromQueueLocal } from "../utils/playerPersistence";
+import { toggleFavoriteEpisode } from "../utils/collectionApi";
 
 export const QueueView = () => {
 
@@ -44,7 +45,7 @@ export const QueueView = () => {
 
   useEffect(() => {
   document.title = "My Playlist • Podcastic";
-}, []);
+  }, []);
  
  
   if (!episodes.length) return <h2>Your queue is empty.</h2>;
@@ -123,7 +124,7 @@ export const QueueView = () => {
                   {/* Favorite Button */}
                   <button
                     onClick={() => {
-                      toggleFavorite(episode.id.toString());
+                      toggleFavoriteEpisode(episode);
                       setEpisodes((prev) => [...prev]);
                     }}
                     className={`text-xl transition hover:scale-110 ${
