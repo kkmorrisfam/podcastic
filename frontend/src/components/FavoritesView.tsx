@@ -1,19 +1,36 @@
 import { useEffect, useState } from "react";
-import { getFavorites, getEpisode, toggleFavorite } from "../utils/storage";
 import PlayButton from "./ui/PlayButton";
-import { formatEpisodeDate, formatHHMMSS } from "../utils/storage";
+import { formatEpisodeDate, formatHHMMSS, type Episode } from "../utils/storage";
+// import { useAuthStore } from "../stores/useAuthStore";
+// import { fetchUserCollections } from "../utils/collectionApi";
+import { loadFavoriteEpisodes } from "../utils/playerPersistence";
+import { toggleFavoriteEpisode } from "../utils/collectionApi";
 
 export default function FavoritesView() {
 //   const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
   const [episodes, setEpisodes] = useState<any[]>([]);
-
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  
   useEffect(() => {
-    const ids = getFavorites();
-    const eps = ids
-      .map((id) => getEpisode(id))
-      .filter(Boolean); // remove nulls if any episodes missing
+  
+    async function load() {
+        try{
+          setLoading(true);
+          setError(null);
 
-    setEpisodes(eps);
+          const favoriteEpisodes = await loadFavoriteEpisodes();
+          setEpisodes(favoriteEpisodes);
+        } catch (error) {
+          console.error("Failed to get favorites.", error);
+          setError("Failed to load favorites");
+        } finally {
+          setLoading(false);
+        }     
+     }
+
+    load()
+
   }, []);
 
   useEffect(() => {
@@ -21,29 +38,51 @@ export default function FavoritesView() {
 }, []);
 
 
-  const handleToggleFavorite = (id: string) => {
-    toggleFavorite(id);
+  const handleToggleFavorite = async (episode: Episode) => {
+    
+    try {
+      setLoading(true);
+      setError(null);
+      // add or remove from database or from local storage
+      // await updateEpisodeFromFavoritesLocal(id);
+      await toggleFavoriteEpisode(episode);
+      const favoriteEpisodes = await loadFavoriteEpisodes(); 
+      setEpisodes(favoriteEpisodes);  
+    } catch(err) {
+      console.error("Failed to toggle favorite.", err);
+      setError("Failed to update favorites");
+    } finally {
+      setLoading(false);
+    }
+    
 
-    // Refresh UI
-    const ids = getFavorites();
-    setEpisodes(ids.map((fid) => getEpisode(fid)).filter(Boolean));
   };
 
   return (
-    <section className="w-full px-4 py-10 bg-bg">
-      <h1 className="text-3xl font-bold mb-8 text-text-primary text-center">
-        ⭐ Favorite Episodes
-      </h1>
-
-      {episodes.length === 0 && (
-        <p className="text-center text-text-secondary">
-          You haven’t favorited any episodes yet.
-        </p>
+    <>
+      <section className="w-full px-4 py-10 bg-bg">
+        <h1 className="text-3xl font-bold mb-8 text-text-primary text-center">
+          ⭐ Favorite Episodes
+        </h1>
+      
+      {loading && (
+        <p className="text-center text-lg text-text-secondary animate-pulse">
+            Loading Favorite Episodes...
+        </p>        
       )}
+      { error && <p className="text-center text-accent mt-4">{error}</p>}
+    
+      {!loading && !error && (
+       <>
+        {episodes.length === 0 && (
+          <p className="text-center text-text-secondary">
+              You haven’t favorited any episodes yet.
+           </p>
+         )}
 
-      {episodes.length > 0 && (
-        <div className="space-y-4 max-w-4xl mx-auto">
-          {episodes.map((ep) => (
+         {episodes.length > 0 && (
+          <div className="space-y-4 max-w-4xl mx-auto">
+           {episodes.map((ep) => (
             <div
               key={ep.id}
               className="grid items-center gap-x-4 py-3 border-b border-slate-300 
@@ -72,7 +111,7 @@ export default function FavoritesView() {
 
               {/* Unfavorite button */}
               <button
-                onClick={() => handleToggleFavorite(ep.id)}
+                onClick={() => handleToggleFavorite(ep)}
                 className="text-xl text-pink-400 hover:scale-110 transition"
                 title="Remove from Favorites"
               >
@@ -82,9 +121,19 @@ export default function FavoritesView() {
               {/* Play */}
               <PlayButton episode={ep} />
             </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
+
+
+       </>
       )}
+    
+
+      
+
+      
     </section>
+    </>
   );
 }

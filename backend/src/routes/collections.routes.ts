@@ -4,6 +4,7 @@ import {
     updateLibrary,
     updateFavorites,
     updateQueue,
+    updateMyPodcasts,
 } from "../controllers/collections.controller.js";
 import { requireAuth } from "../middleware/requireAuth";
 
@@ -17,5 +18,6 @@ router.get("/me", getUserData);
 router.post("/me/library", updateLibrary);
 router.post("/me/favorites", updateFavorites);
 router.post("/me/queue", updateQueue);
+router.post("/me/mypodcasts", updateMyPodcasts);
 
 export default router;

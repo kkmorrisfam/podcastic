@@ -12,6 +12,7 @@ export async function getUserData(req: Request, res: Response) {
       library: user.library,
       favorites: user.favorites,
       queue: user.queue,
+      podcastLibrary: user.podcastLibrary, 
     });
   } catch (err) {
     return res.status(500).json({ error: "Failed to load user data" });
@@ -20,13 +21,16 @@ export async function getUserData(req: Request, res: Response) {
 
 export async function updateLibrary(req: Request, res: Response) {
   try {
-    const userId = (req as any).user.id;
-    // const { userId } = req.params;
+    const userId = (req as any).user.id;    
     const { library } = req.body; // { [episodeId]: Episode }
+
+    const setPaths = Object.fromEntries(
+      Object.entries(library).map(([id, ep]) => [`library.${id}`, ep])
+    );
 
     const user = await User.findByIdAndUpdate(
       userId,
-      { library },
+      { $set: setPaths },   //merge/update individual episodes into map
       { new: true }
     );
 
@@ -69,5 +73,28 @@ export async function updateQueue(req: Request, res: Response) {
     return res.json({ queue: user?.queue });
   } catch (err) {
     return res.status(500).json({ error: "Failed to update queue" });
+  }
+}
+
+export async function updateMyPodcasts(req: Request, res: Response) {
+  try {
+    const userId = (req as any).user.id;
+    const { podcastLibrary } = req.body as {
+      podcastLibrary: Record<string, any>;
+    };
+
+    //create new object on the fly with data
+    const setPaths = Object.fromEntries(
+      Object.entries(podcastLibrary).map(([id,pod]) => [`podcastLibrary.${id}`, pod])
+    )
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      {$set: setPaths},  //merge/update individual podcasts into map
+      {new: true}
+    );
+    return res.json({podcastLibrary: user?.podcastLibrary});
+  } catch (err) {
+    return res.status(500).json({ error: "Failed to update my podcasts" });
   }
 }

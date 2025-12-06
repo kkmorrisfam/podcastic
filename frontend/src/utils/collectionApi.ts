@@ -1,8 +1,8 @@
 import { useAuthStore } from "../stores/useAuthStore";
 import { apiFetch } from "./api";
 import { API_BASE } from "./config";
-import { getFavorites, setFavorites, getLibrary } from "./storage";
-import type { Episode } from "./storage";
+import { getFavorites, setFavorites, getLibrary, getPodcastLibrary, addPodcastToLibrary, isPodcastInLibrary, removePodcastFromLibrary } from "./storage";
+import type { Episode, PodcastSummary } from "./storage";
 
 export async function fetchUserCollections() {
   const res = await apiFetch(`${API_BASE}/api/user/me`);
@@ -24,6 +24,7 @@ export async function saveLibrary(library: Record<string, any>) {
 }
 
 export async function saveFavorites(favorites: string[]) {
+  // console.log("👋 inside saveFavorites");
   const res = await apiFetch(`${API_BASE}/api/user/me/favorites`, {
     method: "POST",
     body: JSON.stringify({ favorites }),
@@ -41,8 +42,22 @@ export async function saveQueue(queue: { episodeId: string }[]) {
   return res.json();
 }
 
+export async function savePodcastIds(podcastIds: string[]) {
+  // console.log("👋 inside savePodcastIds");
+  const res = await apiFetch(`${API_BASE}/api/user/me/updateMyPodcasts`, {
+    method: "POST",
+    body: JSON.stringify({ podcastIds }),
+  });
+  if (!res.ok) throw new Error("Failed to save my podcasts on backend");
+  return res.json();
+}
+
+
 export async function toggleFavoriteEpisode(episode: Episode): Promise<boolean> {
+
   const { isLoggedIn } = useAuthStore.getState();
+
+  // console.log("🔥 toggleFavoriteEpisode called with", episode.id, "logged in?", isLoggedIn());
 
   //toggle locally - add or delete id from favorites array
   const current = new Set(getFavorites());
@@ -55,7 +70,7 @@ export async function toggleFavoriteEpisode(episode: Episode): Promise<boolean> 
   const favArray = Array.from(current);
   setFavorites(favArray);
 
-  //double check that episode data is in local storage
+  //double check that podcast data is in local storage
   const localEpisodeRecord = getLibrary();
   if (!localEpisodeRecord[episode.id]) {
     localEpisodeRecord[episode.id] = episode;
@@ -66,11 +81,51 @@ export async function toggleFavoriteEpisode(episode: Episode): Promise<boolean> 
     const episodesOnly = Object.fromEntries(
         Object.entries(localEpisodeRecord).filter(([_, item])=> item.durationSec)  //durationSec is only in the episode type
     );
-
+    // console.log("⏩ isLoggedIn and episodeOnly object: ", episodesOnly)
+    // console.log("favArray: ", favArray);
     try {
       await Promise.all([
         saveFavorites(favArray),     
         saveLibrary(episodesOnly),
+      ])
+    } catch (error) {
+      console.error("Failed to sync favorites to backend", error);
+    }
+  } 
+
+  return current.has(episode.id);
+}
+
+export async function toggleUpdatePodcastLibrary(podcast: PodcastSummary): Promise<boolean> {
+
+  const { isLoggedIn } = useAuthStore.getState();  
+
+  //toggle locally - add or delete id from local
+  const podcastId = String(podcast.id);  //get the id from the podcast summary object
+
+  //with id, check if podcast is in local library 
+  // if in local library, remove
+  if (isPodcastInLibrary(podcastId)) {
+    removePodcastFromLibrary(podcastId);
+  } else {
+    addPodcastToLibrary({
+      id: podcastId,
+      title: podcast.title,
+      image: podcast.image,
+      author: podcast.author,
+      url: podcast.url,
+    });
+  } 
+
+  // if logged in, sync local with database
+  if(isLoggedIn()) {   
+    
+    // console.log("⏩ isLoggedIn and episodeOnly object: ", episodesOnly)
+    // console.log("favArray: ", favArray);
+    try {
+      await Promise.all([
+        savePodcastIds(favArray),     
+        // saveLibrary(episodesOnly),
       ])
     } catch (error) {
       console.error("Failed to sync favorites to backend", error);

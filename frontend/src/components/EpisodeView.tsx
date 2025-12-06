@@ -13,6 +13,7 @@ import { API_BASE } from "../utils/config";
 import { useEffect, useState } from "react";
 import PlayButton from "./ui/PlayButton";
 import { MdOutlineAddToQueue } from "react-icons/md";
+import { toggleFavoriteEpisode } from "../utils/collectionApi";
 
 
 type ApiEpisode = {
@@ -158,7 +159,7 @@ export default function EpisodeView({ feedId }: { feedId: number }) {
                   {/* Favorite Button */}
                   <button
                     onClick={() => {
-                      toggleFavorite(episode.id.toString());
+                      toggleFavoriteEpisode(episode);
                       setEpisodes((prev) => [...prev]);
                     }}
                     className={`text-xl transition hover:scale-110 ${
