@@ -77,6 +77,7 @@ export async function updateQueue(req: Request, res: Response) {
 }
 
 export async function updateMyPodcasts(req: Request, res: Response) {
+  console.log("⏩Running updateMyPodcast");
   try {
     const userId = (req as any).user.id;
     const {podcastLibrary} = req.body as{
@@ -89,7 +90,8 @@ export async function updateMyPodcasts(req: Request, res: Response) {
     const incomingIds = Object.keys(podcastLibrary);  //ids from frontend
 
     //get ids from database
-    const existingIds = Array.from((user.podcastLibrary || new Map()).keys());
+    const libraryMap = (user.podcastLibrary as Map <string, any>) || new Map<string, any>();
+    const existingIds = Array.from(libraryMap.keys());
     
     const toRemove = existingIds.filter((id) => !incomingIds.includes(id));
     
@@ -102,6 +104,12 @@ export async function updateMyPodcasts(req: Request, res: Response) {
     const unsetPaths = Object.fromEntries(
       toRemove.map((id) => [`podcastLibrary.${id}`, ""])
     );
+
+
+console.log("incomingIds:", incomingIds);
+console.log("existingIds:", existingIds);
+console.log("toRemove:", toRemove);
+console.log("unsetPaths:", unsetPaths);
 
     const updated = await User.findByIdAndUpdate(
       userId,

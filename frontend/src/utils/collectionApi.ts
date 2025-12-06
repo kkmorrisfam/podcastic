@@ -44,6 +44,8 @@ export async function saveQueue(queue: { episodeId: string }[]) {
 
 export async function savePodcasts(podcastLibrary: Record<string, any>) {
   console.log("👋 inside savePodcastIds");
+  console.log(JSON.stringify({podcastLibrary}));
+  console.log("API_BASE in savePodcast", API_BASE);
   const res = await apiFetch(`${API_BASE}/api/user/me/updateMyPodcasts`, {
     method: "POST",
     body: JSON.stringify({ podcastLibrary }),
@@ -97,7 +99,7 @@ export async function toggleFavoriteEpisode(episode: Episode): Promise<boolean> 
 }
 
 export async function toggleUpdatePodcastLibrary(podcast: PodcastSummary): Promise<boolean> {
-
+  console.log("👋Inside toggleUpdatePodcastLibrary")
   const { isLoggedIn } = useAuthStore.getState();  
 
   //toggle locally - add or delete id from local
