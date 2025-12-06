@@ -15,6 +15,8 @@ export async function getUserData(req: Request, res: Response) {
       podcastLibrary: user.podcastLibrary, 
     });
   } catch (err) {
+    console.error("Error in getUserData: ", err);
+    console.log("Error in getUserData: ", err);
     return res.status(500).json({ error: "Failed to load user data" });
   }
 }

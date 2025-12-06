@@ -23,6 +23,7 @@ export async function registerUser(req: Request, res: Response) {
       library: {},
       favorites: [],
       queue: [],
+      podcastLibrary: {},
     });
 
     return res.json({ id: user._id, firstName: user.firstName, lastName: user.lastName, email: user.email });
