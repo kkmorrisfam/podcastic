@@ -42,11 +42,11 @@ export async function saveQueue(queue: { episodeId: string }[]) {
   return res.json();
 }
 
-export async function savePodcastIds(podcastIds: string[]) {
-  // console.log("👋 inside savePodcastIds");
+export async function savePodcasts(podcastLibrary: Record<string, any>) {
+  console.log("👋 inside savePodcastIds");
   const res = await apiFetch(`${API_BASE}/api/user/me/updateMyPodcasts`, {
     method: "POST",
-    body: JSON.stringify({ podcastIds }),
+    body: JSON.stringify({ podcastLibrary }),
   });
   if (!res.ok) throw new Error("Failed to save my podcasts on backend");
   return res.json();
@@ -105,32 +105,26 @@ export async function toggleUpdatePodcastLibrary(podcast: PodcastSummary): Promi
 
   //with id, check if podcast is in local library 
   // if in local library, remove
+  let isInLibrary = false;
+
   if (isPodcastInLibrary(podcastId)) {
     removePodcastFromLibrary(podcastId);
+    isInLibrary = false;
   } else {
-    addPodcastToLibrary({
-      id: podcastId,
-      title: podcast.title,
-      image: podcast.image,
-      author: podcast.author,
-      url: podcast.url,
-    });
+    addPodcastToLibrary(podcast);
+    isInLibrary = true;    
   } 
 
   // if logged in, sync local with database
   if(isLoggedIn()) {   
     
-    // console.log("⏩ isLoggedIn and episodeOnly object: ", episodesOnly)
-    // console.log("favArray: ", favArray);
     try {
-      await Promise.all([
-        savePodcastIds(favArray),     
-        // saveLibrary(episodesOnly),
-      ])
+      const libraryMap = getPodcastLibrary();  //this only works if local storage is correct.
+      await savePodcasts(libraryMap);
     } catch (error) {
       console.error("Failed to sync favorites to backend", error);
     }
   } 
 
-  return current.has(episode.id);
+  return isInLibrary;
 }

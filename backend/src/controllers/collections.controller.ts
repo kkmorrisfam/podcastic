@@ -79,20 +79,37 @@ export async function updateQueue(req: Request, res: Response) {
 export async function updateMyPodcasts(req: Request, res: Response) {
   try {
     const userId = (req as any).user.id;
-    const { podcastLibrary } = req.body as {
+    const {podcastLibrary} = req.body as{
       podcastLibrary: Record<string, any>;
     };
 
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({error: "User not found"});
+
+    const incomingIds = Object.keys(podcastLibrary);  //ids from frontend
+
+    //get ids from database
+    const existingIds = Array.from((user.podcastLibrary || new Map()).keys());
+    
+    const toRemove = existingIds.filter((id) => !incomingIds.includes(id));
+    
+    
     //create new object on the fly with data
     const setPaths = Object.fromEntries(
       Object.entries(podcastLibrary).map(([id,pod]) => [`podcastLibrary.${id}`, pod])
     )
 
-    const user = await User.findByIdAndUpdate(
-      userId,
-      {$set: setPaths},  //merge/update individual podcasts into map
-      {new: true}
+    const unsetPaths = Object.fromEntries(
+      toRemove.map((id) => [`podcastLibrary.${id}`, ""])
     );
+
+    const updated = await User.findByIdAndUpdate(
+      userId,
+      { $set: setPaths, $unset:unsetPaths},  //merge/update individual podcasts into map
+      // {podcastLibrary},
+      {new: true},
+    );
+    
     return res.json({podcastLibrary: user?.podcastLibrary});
   } catch (err) {
     return res.status(500).json({ error: "Failed to update my podcasts" });

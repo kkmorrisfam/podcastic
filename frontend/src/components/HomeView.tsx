@@ -5,11 +5,13 @@ import {
   addPodcastToLibrary,
   removePodcastFromLibrary,
   isPodcastInLibrary,
+  type PodcastSummary,
 } from "../utils/storage";
 
 import { Link } from "react-router-dom";
 // import { MdOutlineAddToQueue } from "react-icons/md";
 import { API_BASE } from "../utils/config";
+import { toggleUpdatePodcastLibrary } from "../utils/collectionApi";
 
 // Interface for podcast data from backend
 interface Podcast {
@@ -78,36 +80,20 @@ export default function HomeView() {
   document.title = "Trending Podcasts • Podcastic";
 }, []);
 
-  // Handle toggling favorites (episodes)
-  // const handleToggleFavorite = (id: number) => {
-  //   const newState = toggleFavorite(String(id));
-  //   setFavorites((prev) => {
-  //     const next = new Set(prev);
-  //     if (newState) next.add(id);
-  //     else next.delete(id);
-  //     return next;
-  //   });
-  // };
-
-  // Handle adding to queue (unchanged)
-  // const handleAddToQueue = (id: number) => {
-  //   addToQueue(String(id));
-  // };
-
   // Handle adding/removing podcast from Library (shows)
-  const handleToggleLibrary = (p: Podcast) => {
-    const idStr = String(p.id);
-    if (isPodcastInLibrary(idStr)) {
-      removePodcastFromLibrary(idStr);
-    } else {
-      addPodcastToLibrary({
-        id: idStr,
-        title: p.title,
-        image: p.image,
-        author: p.author,
-        url: p.url,
-      });
+  const handleToggleLibrary = async (p: Podcast) => {
+    // convert API Podcast id:number to expected id:string
+    const summary: PodcastSummary = {
+      id: String(p.id),
+      title: p.title,
+      image: p.image,
+      author: p.author,
+      url: p.url,
     }
+
+    //toggle local podcast library, sync to database if logged in
+    await toggleUpdatePodcastLibrary(summary);
+    
     // force re-render
     setPodcasts((prev) => [...prev]);
   };
@@ -166,7 +152,9 @@ export default function HomeView() {
 
                     {/* Library Button */}
                     <button
-                      onClick={() => handleToggleLibrary(p)}
+                      onClick={() => 
+                        handleToggleLibrary(p)
+                      }
                       className={`text-2xl hover:scale-110 transition ${
                         inLibrary ? "text-highlight" : "text-text-secondary"
                       }`}

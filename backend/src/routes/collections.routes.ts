@@ -18,6 +18,6 @@ router.get("/me", getUserData);
 router.post("/me/library", updateLibrary);
 router.post("/me/favorites", updateFavorites);
 router.post("/me/queue", updateQueue);
-router.post("/me/mypodcasts", updateMyPodcasts);
+router.post("/me/updateMyPodcasts", updateMyPodcasts);
 
 export default router;
