@@ -28,7 +28,7 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin) return callback(null, true); // Allow server-to-server & CLI tools
+      if (!origin) return callback(null, true); // tools / server-to-server
       if (allowedOrigins.includes(origin)) return callback(null, true);
       return callback(new Error("Not allowed by CORS"));
     },
@@ -36,9 +36,8 @@ app.use(
   })
 );
 
-// ----------------------
-// Middleware
-// ----------------------
+
+
 app.use(express.json());
 
 // Routes

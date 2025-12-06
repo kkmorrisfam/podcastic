@@ -4,14 +4,25 @@ import {
     updateLibrary,
     updateFavorites,
     updateQueue,
+    updateMyPodcasts,
 } from "../controllers/collections.controller.js";
+import { requireAuth } from "../middleware/requireAuth";
 
 const router = express.Router();
 
-router.get("/:userId", getUserData);
+// everything below this requires a valid JWT
+router.use(requireAuth);
 
-router.post("/:userId/library", updateLibrary);
-router.post("/:userId/favorites", updateFavorites);
-router.post("/:userId/queue", updateQueue);
+router.get("/me", getUserData);
+
+router.post("/me/library", updateLibrary);
+router.post("/me/favorites", updateFavorites);
+router.post("/me/queue", updateQueue);
+// router.post("/me/updateMyPodcasts", updateMyPodcasts);
+router.post("/me/updateMyPodcasts", (req, res, next) => {
+  console.log("🔥 Route /me/updateMyPodcasts hit");
+  next(); // pass control to the real handler
+}, updateMyPodcasts);
+
 
 export default router;

@@ -10,6 +10,7 @@ interface PlayerStore {
     library: Library; // dictionary of episode objects, library[id] retrieves the full episode object
     currentIndex: number;
     isHydrated: boolean; // is the persisstence data loaded yet?
+    
 
     //actions
     hydrateFromPersistence: (library: Library, queue: Queue) => void;    
@@ -21,6 +22,7 @@ interface PlayerStore {
     playEpisode: (episodes: Episode[], startIndex: number) => void;
     addToQueueStore: (episode: Episode, opts?:{toTop?: boolean; playIfEmpty?:boolean}) => void;
     removeFromQueueStore: (episodeId: string) => void;
+    // getEpisodeRecord: (episodeId: string) => {}
 }
 
 export const usePlayerStore = create<PlayerStore>((set, get) => ({
@@ -32,6 +34,7 @@ export const usePlayerStore = create<PlayerStore>((set, get) => ({
     isPlaying: false,     
     currentIndex: -1,
     isHydrated: false,
+
 
     
     // initializeQueue: (queue: Queue) => {
@@ -66,6 +69,7 @@ export const usePlayerStore = create<PlayerStore>((set, get) => ({
             currentEpisode,
             currentIndex,
             isHydrated: true,
+            
         });
     },
 

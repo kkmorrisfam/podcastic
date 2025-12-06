@@ -1,14 +1,17 @@
 import { useState, useEffect } from "react"
-import { getEpisode, toggleFavorite, formatEpisodeDate, formatHHMMSS, isFavorite } from "../utils/storage"
+// import { getEpisode, toggleFavorite, formatEpisodeDate, formatHHMMSS, isFavorite } from "../utils/storage"
+import { formatEpisodeDate, formatHHMMSS, isFavorite } from "../utils/storage"
 import PlayButton from "./ui/PlayButton";
 import { MdOutlineAddToQueue } from "react-icons/md";
 import type { Episode } from "../utils/storage";
 import { usePlayerStore } from "../stores/usePlayerStore";
 import { addEpisodeToQueueLocal, removeEpisodeFromQueueLocal } from "../utils/playerPersistence";
+import { toggleFavoriteEpisode } from "../utils/collectionApi";
 
 export const QueueView = () => {
 
-  const queue = usePlayerStore((state) => state.queue);
+  const queue = usePlayerStore((state) => state.queue);  //get ids
+  const episodeLibrary = usePlayerStore((state) => state.library);  //get library
   const [episodes, setEpisodes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -21,8 +24,14 @@ export const QueueView = () => {
 
         //get queue from store, which get's from storage        
         const episodes = queue
-            .map((item) => getEpisode(item.episodeId))
-            .filter(Boolean); //remove nulls if any episode is missing
+            .map((item) => episodeLibrary[item.episodeId])  //look up id
+            .filter((ep): ep is Episode => Boolean(ep));   // don't inclue missing ones
+
+            // queue.forEach((key) => {
+        //   if (episodeLibrary.hasOwnProperty(key)) {
+        //     episodes[key] = episodeLibrary[key];
+        //   }
+        // })
 
         setEpisodes(episodes);
     } catch (err) {
@@ -36,7 +45,7 @@ export const QueueView = () => {
 
   useEffect(() => {
   document.title = "My Playlist • Podcastic";
-}, []);
+  }, []);
  
  
   if (!episodes.length) return <h2>Your queue is empty.</h2>;
@@ -115,7 +124,7 @@ export const QueueView = () => {
                   {/* Favorite Button */}
                   <button
                     onClick={() => {
-                      toggleFavorite(episode.id.toString());
+                      toggleFavoriteEpisode(episode);
                       setEpisodes((prev) => [...prev]);
                     }}
                     className={`text-xl transition hover:scale-110 ${

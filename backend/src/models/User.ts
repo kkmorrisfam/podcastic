@@ -16,6 +16,18 @@ const EpisodeSchema = new mongoose.Schema(
   { _id: false }
 );
 
+
+const PodcastSchema =  new mongoose.Schema(
+  {
+  id: {type: String, required: true},
+  title: {type: String},
+  image: {type: String},
+  author: {type: String},
+  url: {type: String},
+  },
+  {_id: false}  //use podcast id, not mongo version
+);
+
 const UserSchema = new mongoose.Schema(
   {
     firstName: { type: String, required: true },
@@ -30,8 +42,14 @@ const UserSchema = new mongoose.Schema(
     },
 
     favorites: {
-      type: [String],
+      type: [String],  //episode ids
       default: [],
+    },
+
+    podcastLibrary: {
+      type: Map,
+      of: PodcastSchema,
+      default: {},
     },
 
     queue: {
