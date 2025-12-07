@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import {
   listPodcastLibrary,
-  removePodcastFromLibrary,
+  // removePodcastFromLibrary,
   type PodcastSummary,
 } from "../utils/storage";
 import { Link } from "react-router-dom";
 import { CiCircleRemove } from "react-icons/ci";
+import { toggleUpdatePodcastLibrary } from "../utils/collectionApi";
 
 export default function LibraryView() {
   const [podcasts, setPodcasts] = useState<PodcastSummary[]>([]);
@@ -22,8 +23,10 @@ export default function LibraryView() {
   document.title = "Your Library • Podcastic";
 }, []);
 
-  const handleRemove = (id: string) => {
-    removePodcastFromLibrary(id);
+// added this to jsx directly because I needed the entire podcast - this works only when local storage is updated first
+  const handleRemove = (podcast: PodcastSummary) => {
+    toggleUpdatePodcastLibrary(podcast);
+    // removePodcastFromLibrary(id);
     refresh();
   };
 
@@ -66,7 +69,7 @@ export default function LibraryView() {
 
                 <div className="mt-auto flex items-center justify-between gap-2">
                   <button
-                    onClick={() => handleRemove(p.id)}
+                    onClick={() => handleRemove(p)}
                     className="text-2xl text-red-400 hover:text-red-500 hover:scale-110 transition"
                     title="Remove from Library"
                   >

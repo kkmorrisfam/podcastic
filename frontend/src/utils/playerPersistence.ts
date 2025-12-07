@@ -11,12 +11,15 @@ export async function hydratePlayer() {
     // logged in → hydrate from backend
     try {
       const { library, queue } = await fetchUserCollections();  
+      console.log("➡️library: ", library);
+      console.log("queue: ", queue);
+
       usePlayerStore
         .getState()
         .hydrateFromPersistence(library ?? {}, queue ?? []);
     } catch (e) {
       console.error("Failed to hydrate from backend, falling back to local", e);
-      await hydratePlayerFromLocalStorage();
+            await hydratePlayerFromLocalStorage();
     }
   } else {
     // guest

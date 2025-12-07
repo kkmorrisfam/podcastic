@@ -24,7 +24,7 @@ export async function saveLibrary(library: Record<string, any>) {
 }
 
 export async function saveFavorites(favorites: string[]) {
-  // console.log("👋 inside saveFavorites");
+  console.log("👋 inside saveFavorites");
   const res = await apiFetch(`${API_BASE}/api/user/me/favorites`, {
     method: "POST",
     body: JSON.stringify({ favorites }),
@@ -59,7 +59,7 @@ export async function toggleFavoriteEpisode(episode: Episode): Promise<boolean> 
 
   const { isLoggedIn } = useAuthStore.getState();
 
-  // console.log("🔥 toggleFavoriteEpisode called with", episode.id, "logged in?", isLoggedIn());
+  console.log("🔥 toggleFavoriteEpisode called with", episode.id, "logged in?", isLoggedIn());
 
   //toggle locally - add or delete id from favorites array
   const current = new Set(getFavorites());

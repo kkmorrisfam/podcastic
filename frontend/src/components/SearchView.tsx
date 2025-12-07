@@ -4,14 +4,17 @@ import { useSearchParams, Link } from "react-router-dom";
 import {
   upsertMany,
   isFavorite,
-  toggleFavorite,
-  addPodcastToLibrary,
-  removePodcastFromLibrary,
+  // toggleFavorite,
+  // addPodcastToLibrary,
+  // removePodcastFromLibrary,
   isPodcastInLibrary,
+  type PodcastSummary,
 } from "../utils/storage";
 
 import { LuLibrary } from "react-icons/lu";
 import { API_BASE } from "../utils/config";
+import { toggleUpdatePodcastLibrary } from "../utils/collectionApi";
+
 interface Podcast {
   id: number;
   title: string;
@@ -75,26 +78,23 @@ export default function SearchView() {
     }
   };
 
-  const handleToggleFavorite = (id: number) => {
-    toggleFavorite(String(id));
-    setResults((prev) => [...prev]); // force UI update
-  };
+  // const handleToggleFavorite = (id: number) => {
+  //   toggleFavorite(String(id));
+  //   setResults((prev) => [...prev]); // force UI update
+  // };
 
-  const handleToggleLibrary = (p: Podcast) => {
-    const idStr = String(p.id);
-
-    if (isPodcastInLibrary(idStr)) {
-      removePodcastFromLibrary(idStr);
-    } else {
-      addPodcastToLibrary({
-        id: idStr,
-        title: p.title,
-        image: p.image,
-        author: p.author,
-        url: p.url,
-      });
-    }
-
+  const handleToggleLibrary = async (p: Podcast) => {
+    // convert API Podcast id:number to expected id:string
+    const summary: PodcastSummary = {
+          id: String(p.id),
+          title: p.title,
+          image: p.image,
+          author: p.author,
+          url: p.url,
+        }
+    //toggle local podcast library, sync to database if logged in
+    await toggleUpdatePodcastLibrary(summary);
+        
     setResults((prev) => [...prev]); // refresh UI
   };
 
@@ -138,17 +138,7 @@ export default function SearchView() {
                     {p.author}
                   </p>
 
-                  {/* Favorite Button */}
-                  <button
-                    onClick={() => handleToggleFavorite(p.id)}
-                    className={`text-xl mr-4 ${
-                      fav ? "text-pink-400" : "text-text-secondary"
-                    } hover:scale-110 transition`}
-                    title={fav ? "Remove from Favorites" : "Add to Favorites"}
-                  >
-                    {fav ? "★" : "☆"}
-                  </button>
-
+                 
                  {/* Library Button */}
                   <button
                     onClick={() => handleToggleLibrary(p)}
