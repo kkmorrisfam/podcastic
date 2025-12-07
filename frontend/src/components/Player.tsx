@@ -6,6 +6,7 @@ import { usePlayerStore } from "../stores/usePlayerStore";
 import { useEffect, useRef, useState } from "react";
 import { formatEpisodeDate } from "../utils/storage";
 import  MusicSlider  from "../components/ui/Slider";
+import { pickFirstValidImageUrl } from "../utils/image";
 
 
 const Player = () => {
@@ -80,6 +81,13 @@ const Player = () => {
     setCurrentTime(value);
   };
 
+  const playerImageSrc = pickFirstValidImageUrl(
+    currentEpisode?.image,
+    currentEpisode?.feedImage
+  ) || "https://picsum.photos/100";  //fallback image
+
+  // src={currentEpisode?.image || currentEpisode?.feedImage || "https://picsum.photos/100" }
+ 
   return (
     <>
       {currentEpisode && (
@@ -88,7 +96,7 @@ const Player = () => {
           {/* Episode Image or if null, Podcast Image, or random image if nothing in currentEpisode */}
           <div className=" h-20 w-20 mb-4 overflow-hidden rounded-md"> 
                     <img
-                      src={currentEpisode?.image || currentEpisode?.feedImage || "https://picsum.photos/100" }
+                      src={playerImageSrc}                     
                       alt={currentEpisode?.title || "no episode selected"}
                       className="w-full object-cover" 
                     /></div>

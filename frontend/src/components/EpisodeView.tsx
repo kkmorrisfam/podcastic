@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import PlayButton from "./ui/PlayButton";
 import { MdOutlineAddToQueue } from "react-icons/md";
 import { toggleFavoriteEpisode } from "../utils/collectionApi";
+import { pickFirstValidImageUrl } from "../utils/image";
 
 
 type ApiEpisode = {
@@ -96,6 +97,8 @@ export default function EpisodeView({ feedId }: { feedId: number }) {
     }
   };
 
+  
+
   return (
     <>
       <div>
@@ -111,20 +114,23 @@ export default function EpisodeView({ feedId }: { feedId: number }) {
 
         {!loading && !error && (
           <div>
-            {episodes.map((episode) => (
-
-              
-
-              <div
+            {episodes.map((episode) => {
+             
+             const thumbImage =
+                pickFirstValidImageUrl(episode.image, episode.feedImage) ||
+                "https://picsum.photos/100";
+                return (
+             <div
                 key={episode.id}
                 className="flex flex-col items-center gap-2 py-3 border-b border-slate-200
                   sm:grid sm:items-center sm:gap4
                   sm:grid-cols-[80px_60px_minmax(0,2fr)_120px_auto]"
               >
+
                 {/* Thumbnail */}
                 <div className="hidden sm:block h-20 w-20 overflow-hidden rounded-md">
                   <img
-                    src={episode.image || episode.feedImage}
+                    src={thumbImage}
                     alt={episode.title}
                     className="w-full h-20 object-cover"
                   />
@@ -193,8 +199,9 @@ export default function EpisodeView({ feedId }: { feedId: number }) {
                   {/* Play Button */}
                   <PlayButton episode={episode} />
                 </div>
-              </div>
-            ))}
+              </div>)
+            }
+            )}
           </div>
         )}
       </div>
