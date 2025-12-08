@@ -16,7 +16,7 @@ export async function getUserData(req: Request, res: Response) {
     });
   } catch (err) {
     console.error("Error in getUserData: ", err);
-    console.log("Error in getUserData: ", err);
+    // console.log("Error in getUserData: ", err);
     return res.status(500).json({ error: "Failed to load user data" });
   }
 }
@@ -79,7 +79,7 @@ export async function updateQueue(req: Request, res: Response) {
 }
 
 export async function updateMyPodcasts(req: Request, res: Response) {
-  console.log("⏩Running updateMyPodcast");
+  // console.log("⏩Running updateMyPodcast");
   try {
     const userId = (req as any).user.id;
     const {podcastLibrary} = req.body as{
@@ -108,10 +108,10 @@ export async function updateMyPodcasts(req: Request, res: Response) {
     );
 
 
-console.log("incomingIds:", incomingIds);
-console.log("existingIds:", existingIds);
-console.log("toRemove:", toRemove);
-console.log("unsetPaths:", unsetPaths);
+    // console.log("incomingIds:", incomingIds);
+    // console.log("existingIds:", existingIds);
+    // console.log("toRemove:", toRemove);
+    // console.log("unsetPaths:", unsetPaths);
 
     const updated = await User.findByIdAndUpdate(
       userId,

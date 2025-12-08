@@ -33,14 +33,12 @@ const Player = () => {
 
     const updateTime = ()=> {
         setCurrentTime(audio.currentTime);
-        console.log("The currentTime attribute has been updated. Again.");
+        // console.log("The currentTime attribute has been updated. Again.");
     };
 
     const updateDuration = () => {
         setDuration(audio.duration);
-        console.log(
-          "The duration and dimensions of the media and tracks are now known.",
-        );
+        // console.log("The duration and dimensions of the media and tracks are now known.",);
       };
 
     //time event fires when the currentTime attribute updates

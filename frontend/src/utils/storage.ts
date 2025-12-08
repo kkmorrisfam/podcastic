@@ -233,7 +233,7 @@ export function bindStorageSync(onChange: (key: StorageKey) => void): () => void
 // =====================================================
 export function clearAllStorage(): void {
   Object.values(STORAGE_KEYS).forEach((key) => localStorage.removeItem(key));
-  console.log("🧹 Cleared all podcastic LocalStorage data.");
+  // console.log("🧹 Cleared all podcastic LocalStorage data.");
 }
 
 // ==========================================================

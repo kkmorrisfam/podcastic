@@ -164,7 +164,7 @@ export async function getEpisodes(req: Request, res: Response) {
   try {
     const feedid = req.params.feedid;
 
-    console.log("req.params.feedid " + feedid);
+    // console.log("req.params.feedid " + feedid);
     if (!feedid) {
       return res.status(400).json({ error: "Missing podcast id parameter" });
     }
@@ -174,7 +174,7 @@ export async function getEpisodes(req: Request, res: Response) {
       { headers: getHeaders() }
     );
 
-    console.log("api response: " + response);
+    // console.log("api response: " + response);
 
     if (!response.ok) {
       const text = await response.text();
@@ -199,7 +199,7 @@ export async function getEpisodeById(req: Request, res: Response) {
   try {
     const id = req.params.id;
 
-    console.log("req.params.id " + id);
+    // console.log("req.params.id " + id);
 
     if (!id) {
       return res.status(400).json({ error: "Missing podcast id parameter" });
@@ -209,7 +209,7 @@ export async function getEpisodeById(req: Request, res: Response) {
       `${API_BASE}/episodes/byid?id=${encodeURIComponent(id)}`,
       { headers: getHeaders() }
     );
-    console.log("api response: " + response);
+    // console.log("api response: " + response);
 
     if (!response.ok) {
       const text = await response.text();
