@@ -4,7 +4,7 @@ import { RiForward15Line, RiReplay15Line, RiSkipBackLine, RiSkipForwardLine } fr
 import PlayButton from "./ui/PlayButton";
 import { usePlayerStore } from "../stores/usePlayerStore";
 import { useEffect, useRef, useState } from "react";
-import { formatEpisodeDate } from "../utils/storage";
+import { formatEpisodeDate, formatHHMMSS } from "../utils/storage";
 import  MusicSlider  from "../components/ui/Slider";
 import { pickFirstValidImageUrl } from "../utils/image";
 
@@ -15,6 +15,11 @@ const Player = () => {
 
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+
+  const safeDuration = Number.isFinite(duration) ? duration : 0;
+  const safeCurrent = Math.min(Math.max(currentTime, 0), safeDuration);
+  const remainingTime = safeDuration - safeCurrent;
+
 
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -155,6 +160,13 @@ const Player = () => {
               onSeek={handleSeek}
             />       
               
+          </div>
+          <div className="mt-1 flex justify-between text-xs text-slate-400">
+            {/* elapsed */}
+            <span>{formatHHMMSS(safeCurrent)}</span>
+
+            {/* remaining, shown with a minus sign */}
+            <span>-{formatHHMMSS(remainingTime)}</span>
           </div>
         </div>
 

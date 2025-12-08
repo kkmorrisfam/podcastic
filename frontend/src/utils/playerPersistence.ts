@@ -1,8 +1,8 @@
 import { usePlayerStore } from "../stores/usePlayerStore";
-import { getEpisode, getFavorites, getLibrary, getQueue, setFavorites, setQueue, upsertMany} from "../utils/storage";
+import { getEpisode, getFavorites, getLibrary, getQueue, setQueue, upsertMany} from "../utils/storage";
 import type { Episode } from "../utils/storage";
 import { useAuthStore } from "../stores/useAuthStore";
-import { fetchUserCollections, saveFavorites, saveLibrary, saveQueue } from "./collectionApi";
+import { fetchUserCollections, saveLibrary, saveQueue } from "./collectionApi";
 
 // Hydrate store from database if logged in
 export async function hydratePlayer() {

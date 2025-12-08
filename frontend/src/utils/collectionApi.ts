@@ -15,6 +15,7 @@ export async function fetchUserCollections() {
 }
 
 export async function saveLibrary(library: Record<string, any>) {
+  console.log("👋 inside saveLibrary");
   const res = await apiFetch(`${API_BASE}/api/user/me/library`, {
     method: "POST",
     body: JSON.stringify({ library }),
@@ -43,7 +44,7 @@ export async function saveQueue(queue: { episodeId: string }[]) {
 }
 
 export async function savePodcasts(podcastLibrary: Record<string, any>) {
-  console.log("👋 inside savePodcastIds");
+  console.log("👋 inside savePodcasts");
   console.log(JSON.stringify({podcastLibrary}));
   console.log("API_BASE in savePodcast", API_BASE);
   const res = await apiFetch(`${API_BASE}/api/user/me/updateMyPodcasts`, {
@@ -83,7 +84,7 @@ export async function toggleFavoriteEpisode(episode: Episode): Promise<boolean> 
     const episodesOnly = Object.fromEntries(
         Object.entries(localEpisodeRecord).filter(([_, item])=> item.durationSec)  //durationSec is only in the episode type
     );
-    // console.log("⏩ isLoggedIn and episodeOnly object: ", episodesOnly)
+    console.log("⏩ isLoggedIn and episodeOnly object: ", JSON.stringify(episodesOnly));
     // console.log("favArray: ", favArray);
     try {
       await Promise.all([
@@ -117,11 +118,12 @@ export async function toggleUpdatePodcastLibrary(podcast: PodcastSummary): Promi
     isInLibrary = true;    
   } 
 
-  // if logged in, sync local with database
+  // if logged in, sync local with database.- there is only a podcastLibrary, not an additional array, like favorites & queue, to sync
   if(isLoggedIn()) {   
     
     try {
       const libraryMap = getPodcastLibrary();  //this only works if local storage is correct.
+
       await savePodcasts(libraryMap);
     } catch (error) {
       console.error("Failed to sync favorites to backend", error);
