@@ -267,9 +267,15 @@ export function formatHHMMSS(secondsToHours?: number): string {
   const minutes = dateObject.getUTCMinutes();
   const seconds = dateObject.getSeconds();
 
-  const timeString = hours.toString().padStart(2,'0') + ':' + minutes.toString().padStart(2,'0') + ':' + seconds.toString().padStart(2, '0');
+  // get rid of leading zeros in hour spot
+  if (hours > 0) {
+    return hours.toString().padStart(2,'0') + ':' + minutes.toString().padStart(2,'0') + ':' + seconds.toString().padStart(2, '0');
+  } else {
+    return minutes.toString().padStart(2,'0') + ':' + seconds.toString().padStart(2, '0');
+  }
+  // const timeString = hours.toString().padStart(2,'0') + ':' + minutes.toString().padStart(2,'0') + ':' + seconds.toString().padStart(2, '0');
 
-  return timeString;
+  // return timeString;
 
 }
 

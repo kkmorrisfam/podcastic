@@ -159,7 +159,7 @@ const Player = () => {
             />       
               
           </div>
-          <div className="mt-1 flex justify-between text-xs text-slate-400">
+          <div className="mt-1 flex justify-between text-xs text-text-secondary">
             {/* elapsed */}
             <span>{formatHHMMSS(safeCurrent)}</span>
 
