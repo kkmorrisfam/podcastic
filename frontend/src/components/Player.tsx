@@ -4,7 +4,7 @@ import { RiForward15Line, RiReplay15Line, RiSkipBackLine, RiSkipForwardLine } fr
 import PlayButton from "./ui/PlayButton";
 import { usePlayerStore } from "../stores/usePlayerStore";
 import { useEffect, useRef, useState } from "react";
-import { formatEpisodeDate } from "../utils/storage";
+import { formatEpisodeDate, formatHHMMSS } from "../utils/storage";
 import  MusicSlider  from "../components/ui/Slider";
 import { pickFirstValidImageUrl } from "../utils/image";
 
@@ -15,6 +15,11 @@ const Player = () => {
 
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+
+  const safeDuration = Number.isFinite(duration) ? duration : 0;
+  const safeCurrent = Math.min(Math.max(currentTime, 0), safeDuration);
+  const remainingTime = safeDuration - safeCurrent;
+
 
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -28,14 +33,12 @@ const Player = () => {
 
     const updateTime = ()=> {
         setCurrentTime(audio.currentTime);
-        console.log("The currentTime attribute has been updated. Again.");
+        // console.log("The currentTime attribute has been updated. Again.");
     };
 
     const updateDuration = () => {
         setDuration(audio.duration);
-        console.log(
-          "The duration and dimensions of the media and tracks are now known.",
-        );
+        // console.log("The duration and dimensions of the media and tracks are now known.",);
       };
 
     //time event fires when the currentTime attribute updates
@@ -155,6 +158,13 @@ const Player = () => {
               onSeek={handleSeek}
             />       
               
+          </div>
+          <div className="mt-1 flex justify-between text-xs text-text-secondary">
+            {/* elapsed */}
+            <span>{formatHHMMSS(safeCurrent)}</span>
+
+            {/* remaining, shown with a minus sign */}
+            <span>-{formatHHMMSS(remainingTime)}</span>
           </div>
         </div>
 

@@ -15,6 +15,7 @@ export async function fetchUserCollections() {
 }
 
 export async function saveLibrary(library: Record<string, any>) {
+  // console.log("👋 inside saveLibrary");
   const res = await apiFetch(`${API_BASE}/api/user/me/library`, {
     method: "POST",
     body: JSON.stringify({ library }),
@@ -24,7 +25,7 @@ export async function saveLibrary(library: Record<string, any>) {
 }
 
 export async function saveFavorites(favorites: string[]) {
-  console.log("👋 inside saveFavorites");
+  // console.log("👋 inside saveFavorites");
   const res = await apiFetch(`${API_BASE}/api/user/me/favorites`, {
     method: "POST",
     body: JSON.stringify({ favorites }),
@@ -43,9 +44,9 @@ export async function saveQueue(queue: { episodeId: string }[]) {
 }
 
 export async function savePodcasts(podcastLibrary: Record<string, any>) {
-  console.log("👋 inside savePodcastIds");
-  console.log(JSON.stringify({podcastLibrary}));
-  console.log("API_BASE in savePodcast", API_BASE);
+  // console.log("👋 inside savePodcasts");
+  // console.log(JSON.stringify({podcastLibrary}));
+  // console.log("API_BASE in savePodcast", API_BASE);
   const res = await apiFetch(`${API_BASE}/api/user/me/updateMyPodcasts`, {
     method: "POST",
     body: JSON.stringify({ podcastLibrary }),
@@ -59,7 +60,7 @@ export async function toggleFavoriteEpisode(episode: Episode): Promise<boolean> 
 
   const { isLoggedIn } = useAuthStore.getState();
 
-  console.log("🔥 toggleFavoriteEpisode called with", episode.id, "logged in?", isLoggedIn());
+  // console.log("🔥 toggleFavoriteEpisode called with", episode.id, "logged in?", isLoggedIn());
 
   //toggle locally - add or delete id from favorites array
   const current = new Set(getFavorites());
@@ -79,11 +80,12 @@ export async function toggleFavoriteEpisode(episode: Episode): Promise<boolean> 
   }
 
   // if logged in, sync local with database
+  // for future - library will update, but not delete on database.  Need to make changes to backend routes, or create separate favorites and queue library
   if(isLoggedIn()) {
     const episodesOnly = Object.fromEntries(
         Object.entries(localEpisodeRecord).filter(([_, item])=> item.durationSec)  //durationSec is only in the episode type
     );
-    // console.log("⏩ isLoggedIn and episodeOnly object: ", episodesOnly)
+    // console.log("⏩ isLoggedIn and episodeOnly object: ", JSON.stringify(episodesOnly));
     // console.log("favArray: ", favArray);
     try {
       await Promise.all([
@@ -99,7 +101,7 @@ export async function toggleFavoriteEpisode(episode: Episode): Promise<boolean> 
 }
 
 export async function toggleUpdatePodcastLibrary(podcast: PodcastSummary): Promise<boolean> {
-  console.log("👋Inside toggleUpdatePodcastLibrary")
+  // console.log("👋Inside toggleUpdatePodcastLibrary")
   const { isLoggedIn } = useAuthStore.getState();  
 
   //toggle locally - add or delete id from local
@@ -117,11 +119,12 @@ export async function toggleUpdatePodcastLibrary(podcast: PodcastSummary): Promi
     isInLibrary = true;    
   } 
 
-  // if logged in, sync local with database
+  // if logged in, sync local with database.- there is only a podcastLibrary, not an additional array, like favorites & queue, to sync
   if(isLoggedIn()) {   
     
     try {
       const libraryMap = getPodcastLibrary();  //this only works if local storage is correct.
+
       await savePodcasts(libraryMap);
     } catch (error) {
       console.error("Failed to sync favorites to backend", error);
