@@ -80,6 +80,7 @@ export async function toggleFavoriteEpisode(episode: Episode): Promise<boolean> 
   }
 
   // if logged in, sync local with database
+  // for future - library will update, but not delete on database.  Need to make changes to backend routes, or create separate favorites and queue library
   if(isLoggedIn()) {
     const episodesOnly = Object.fromEntries(
         Object.entries(localEpisodeRecord).filter(([_, item])=> item.durationSec)  //durationSec is only in the episode type
