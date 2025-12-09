@@ -110,7 +110,33 @@ The app features:
 
 ## Setup & Run
 
-### 1️Clone the Repository
+### 1️ Clone the Repository
+
 ```bash
 git clone https://github.com/yourusername/podcastic.git
 cd podcastic
+```
+
+### 2️ Install Dependencies
+
+```bash
+cd ../frontend
+npm install
+
+cd ../backend
+npm install
+```
+
+### 3 Run in localhost
+
+#### podcastic/frontend
+
+```bash
+npm run dev
+```
+
+#### podcastic/backend
+
+```bash
+npm run dev
+```

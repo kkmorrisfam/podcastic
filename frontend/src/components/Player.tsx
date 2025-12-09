@@ -8,7 +8,17 @@ import { formatEpisodeDate, formatHHMMSS } from "../utils/storage";
 import  MusicSlider  from "../components/ui/Slider";
 import { pickFirstValidImageUrl } from "../utils/image";
 
-
+/**
+ * The global Player component controls audio playback for the application.
+ * It:
+ *  - Loads and tracks the current episode from the Zustand player store
+ *  - Listens to `timeupdate`, `loadedmetadata`, and `ended` events on the audio element
+ *  - Updates the slider, elapsed/remaining time, and displayed episode info
+ *  - Provides playback controls (play/pause, previous/next episode, +/- 15 sec seek)
+ *  - Handles safe clamping and formatting of time values
+ *
+ * This component renders only when an episode is selected to play
+ */
 const Player = () => {
   // need to update state for isPlaying, currentEpisode, queue[]
   const {currentEpisode, playPrevious, playNext} = usePlayerStore();

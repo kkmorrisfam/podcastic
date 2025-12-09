@@ -11,7 +11,7 @@ export async function hydratePlayer() {
     // logged in → hydrate from backend
     try {
       const { library, queue } = await fetchUserCollections();  
-      // console.log("➡️library: ", library);
+      // console.log("library: ", library);
       // console.log("queue: ", queue);
 
       usePlayerStore
@@ -37,7 +37,7 @@ export async function hydratePlayerFromLocalStorage() {
   usePlayerStore.getState().hydrateFromPersistence(library, queue);
 }
 
-// 2) Snapshot current Zustand state back into localStorage or if logged in: database
+// Snapshot current Zustand state back into localStorage or if logged in: database
 async function persistSnapshot() {
   const { queue, library } = usePlayerStore.getState();
   const { isLoggedIn } = useAuthStore.getState();
@@ -71,7 +71,8 @@ async function persistSnapshot() {
   }
 }
 
-// 3) High-level helpers for components to call
+
+// Helpers to add or remove episode from state and database or local storage
 
 export async function addEpisodeToQueueLocal(
   episode: Episode,
@@ -81,48 +82,14 @@ export async function addEpisodeToQueueLocal(
   await persistSnapshot();                                  // adds episode state to queue database or local storage
 }
 
+
 export async function removeEpisodeFromQueueLocal(episodeId: string) {
   usePlayerStore.getState().removeFromQueueStore(episodeId);  //removed episode from queue state
   await persistSnapshot();                                    // removes episode state from queue database or local storage
 }
 
-// do I need this?
-// export async function playEpisodesLocal(
-//   episodes: Episode[],
-//   startIndex = 0
-// ) {
-//   usePlayerStore.getState().playEpisode(episodes, startIndex);
-//   await persistSnapshot();
-// }
 
-
-//***** use toggleFavoriteEpisode in collectionApi.ts */
-// export async function updateEpisodeFromFavoritesLocal(episodeId: string) {
-//   const {isLoggedIn} = useAuthStore.getState();
-
-//   if(isLoggedIn()) {
-//     try {
-//       //get favorites from database
-//       const { favorites } = await fetchUserCollections();
-//       const isFav = favorites.includes(episodeId);
-//       const nextFavorites = isFav ? favorites.filter((fid) => fid!==episodeId) : [...favorites, episodeId];
-      
-//       await saveFavorites(nextFavorites);
-            
-//     } catch (err) {
-//       console.error("Failed to toggle favorite on backend", err);
-//     }
-//   } else {
-//     //get favorites from localstorage
-//     const localFavorites = getFavorites(); //returns string []
-//     const isFav = localFavorites.includes(episodeId);
-//     const nextFavorites = isFav ? localFavorites.filter((fid) => fid!==episodeId) : [...localFavorites, episodeId];
-//     setFavorites(nextFavorites)   
-    
-//   }
-
-// }
-
+// Get favorite episodes - if logged in, from database, if guest, from local storage
 export async function loadFavoriteEpisodes(): Promise<Episode[]> {
   const { isLoggedIn } = useAuthStore.getState();
 
