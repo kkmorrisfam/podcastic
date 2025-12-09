@@ -10,30 +10,28 @@ import { toggleFavoriteEpisode } from "../utils/collectionApi";
 
 export const QueueView = () => {
 
+  // get the queue (episode Ids)  and library (episode objects) from the store
   const queue = usePlayerStore((state) => state.queue);  //get ids
   const episodeLibrary = usePlayerStore((state) => state.library);  //get library
+
+  // create local state variables
   const [episodes, setEpisodes] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   //get on initial render
+  // change loading and error, set episodes 
   useEffect(()=> {
     try {
         setLoading(true);
         setError(null);
 
-        //get queue from store, which get's from storage        
+        //get queue from store, which get's from local storage or database
         const episodes = queue
             .map((item) => episodeLibrary[item.episodeId])  //look up id
             .filter((ep): ep is Episode => Boolean(ep));   // don't inclue missing ones
 
-            // queue.forEach((key) => {
-        //   if (episodeLibrary.hasOwnProperty(key)) {
-        //     episodes[key] = episodeLibrary[key];
-        //   }
-        // })
-
-        setEpisodes(episodes);
+        setEpisodes(episodes);  //set state variable
     } catch (err) {
         console.error(err);
         setError("Unable to load queue. Please try again later.");
@@ -43,13 +41,16 @@ export const QueueView = () => {
 
   },[queue]);
 
+  // on page load, change document title
   useEffect(() => {
   document.title = "My Playlist • Podcastic";
   }, []);
  
- 
+ // before anything else, if episodes variable is empty, just show message.
   if (!episodes.length) return <h2>Your queue is empty.</h2>;
 
+  // handle click for queue icon - acts as a toggle.  If episode Id is in queue, remove, if it's not there
+  // add episode Id to queue. 
   const handleQueueClick = async (episode: Episode) => {
       const isInQueue = queue.some((item) => item.episodeId === episode.id);
   
@@ -63,6 +64,7 @@ export const QueueView = () => {
       }
     };
 
+    // display a list of episodes that are saved in the user's queue
   return (
     <>
       <div>
