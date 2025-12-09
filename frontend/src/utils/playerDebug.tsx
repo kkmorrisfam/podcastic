@@ -1,4 +1,6 @@
-import { usePlayerStore } from "../stores/usePlayerStore";
+//not apart of the project, just used for "seeing" changes
+
+/* import { usePlayerStore } from "../stores/usePlayerStore";
 import {
   addEpisodeToQueueLocal,
   removeEpisodeFromQueueLocal,
@@ -69,3 +71,4 @@ export function PlayerDebug() {
     </div>
   );
 }
+ */
