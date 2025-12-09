@@ -1,4 +1,3 @@
-// File: src/components/NavBar.tsx
 import { NavLink, useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { useAuthStore } from "../stores/useAuthStore";
