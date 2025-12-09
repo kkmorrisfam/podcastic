@@ -1,10 +1,34 @@
+/**
+ * EpisodeView Component
+ * ---------------------
+ * Loads and displays all episodes for a given podcast feed, using the feedId
+ * passed into the component. Fetches data from the backend API, converts the
+ * raw API episodes into the internal Episode model, and renders each episode
+ * with metadata and user interaction controls.
+ *
+ * Features:
+ *  - Fetches episodes via `/api/podcast/episodes/byfeedid/:feedId`
+ *  - Maps external API episode fields to the app's Episode type
+ *  - Shows loading and error states
+ *  - Displays episode artwork, number, title, publish date, and duration
+ *  - Allows users to:
+ *      • Play an episode
+ *      • Add or remove an episode from the playback queue
+ *      • Favorite/unfavorite an episode
+ *  - Responsive layout that changes for mobile vs. desktop
+ *
+ * Integration:
+ *  - Uses Zustand's `usePlayerStore` to access the queue
+ *  - Uses localStorage-based helpers for queue persistence
+ *  - Syncs favorites with local storage or backend collections
+ */
+
+
 import type { Episode } from "../utils/storage";
 import {
   formatEpisodeDate,
   formatHHMMSS,
   isFavorite,
-  // toggleFavorite,
-  // addToQueue,
 } from "../utils/storage";
 import { addEpisodeToQueueLocal, removeEpisodeFromQueueLocal } from "../utils/playerPersistence";
 import { usePlayerStore } from "../stores/usePlayerStore";

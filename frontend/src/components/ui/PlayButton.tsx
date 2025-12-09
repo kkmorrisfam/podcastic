@@ -1,3 +1,9 @@
+/**
+ * Play/Pause button for an episode. Toggles playback if the episode is already
+ * active, or loads the episode into the player if it's not. Shows a disabled
+ * button if no episode is provided.
+ */
+
 import { usePlayerStore } from "../../stores/usePlayerStore.ts";
 import type { Episode } from "../../utils/storage.ts";
 import { FaPause, FaPlay, FaRegCirclePlay   } from "react-icons/fa6";
